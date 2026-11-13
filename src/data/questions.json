@@ -1,0 +1,77 @@
+{
+  "topics": [
+    {
+      "id": "work",
+      "keywords": ["work","job","boss","colleague","deadline","project","career","office","meeting","school","exam","study","manager","client","task","money","salary"],
+      "questions": [
+        "Which part of this is up to you, and which part is not?",
+        "What is the fact here, and what is the story you are adding to it?",
+        "If you had to write the next small step on a sticky note, what would it say?",
+        "Which \"I have to\" in this could become \"I choose to\" or \"I won't\"?"
+      ]
+    },
+    {
+      "id": "relationships",
+      "keywords": ["friend","partner","wife","husband","boyfriend","girlfriend","mother","father","mom","mum","dad","parent","family","brother","sister","sibling","relationship","argument","fight","lonely","alone","love","ex"],
+      "questions": [
+        "What did they actually do or say, before you decided what it meant?",
+        "What would you say to them if you knew they would listen calmly?",
+        "Which part of this relationship is up to you today?",
+        "What do you want for this person, apart from what you want from them?"
+      ]
+    },
+    {
+      "id": "worry",
+      "keywords": ["worry","worried","anxious","anxiety","afraid","fear","scared","nervous","what if","future","uncertain","panic","stress","stressed","overthinking"],
+      "questions": [
+        "What has actually happened so far, and what has only happened in your head?",
+        "If the thing you fear happened, what would you do first?",
+        "How much of this will matter to you one year from now?",
+        "What part of this can you act on today, and what can only wait?"
+      ]
+    },
+    {
+      "id": "anger",
+      "keywords": ["angry","anger","mad","furious","annoyed","irritated","hate","unfair","rude","frustrated","frustrating","rage","pissed"],
+      "questions": [
+        "What judgment are you making about what happened, apart from what happened?",
+        "What would a calm version of you do next?",
+        "Is the other person's behaviour up to you, or only your answer to it?",
+        "If you saw this from far above, how large would it look?"
+      ]
+    },
+    {
+      "id": "tired",
+      "keywords": ["tired","exhausted","sleep","sleepy","burnout","burned out","burnt out","drained","no energy","lazy","unmotivated","bored","boring","numb"],
+      "questions": [
+        "What is the smallest thing your body is asking for right now?",
+        "Which of today's \"I have to\" could you put down for one day?",
+        "What did you notice in your body before you started writing this?",
+        "What would rest look like if you chose it instead of falling into it?"
+      ]
+    },
+    {
+      "id": "other",
+      "keywords": [],
+      "questions": [
+        "What part of this is up to you?",
+        "Right now, what do you notice, before you explain it?",
+        "What is the fact here, and what is the story you are adding to it?",
+        "If a friend told you this, what would you ask them?"
+      ]
+    }
+  ],
+  "followUps": [
+    "What is one small action you could take today that would be yours to take?",
+    "If you wrote this as \"I choose to\", what would the sentence be?",
+    "What would you do differently if you could not fail at it?",
+    "What would you want to remember about this a week from now?"
+  ],
+  "quotes": [
+    { "text": "Of things some are in our power, and others are not.", "author": "Epictetus", "work": "Enchiridion, 1, tr. George Long" },
+    { "text": "Men are disturbed not by the things which happen, but by the opinions about the things.", "author": "Epictetus", "work": "Enchiridion, 5, tr. George Long" },
+    { "text": "We suffer more often in imagination than in reality.", "author": "Seneca", "work": "Moral Letters to Lucilius, 13, tr. Richard M. Gummere" },
+    { "text": "Such as are thy habitual thoughts, such also will be the character of thy mind.", "author": "Marcus Aurelius", "work": "Meditations, V.16, tr. George Long" },
+    { "text": "Remember this, that very little is needed to make a happy life.", "author": "Marcus Aurelius", "work": "Meditations, VII.67, tr. George Long" }
+  ]
+}
