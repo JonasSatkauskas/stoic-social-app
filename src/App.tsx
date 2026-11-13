@@ -17,8 +17,22 @@ const NAV: { tab: Tab; label: string; Icon: () => React.JSX.Element }[] = [
   { tab: 'notes', label: 'Notes', Icon: NotesIcon },
 ];
 
+/** Web Crypto, the camera and offline mode only exist on HTTPS (or localhost). */
+function InsecureNotice() {
+  return (
+    <main className="app">
+      <section className="screen" aria-labelledby="insecure-title">
+        <h1 id="insecure-title">This page needs a secure connection.</h1>
+        <p>Everything here is encrypted on your phone, and browsers only allow that over HTTPS.</p>
+        <p className="muted">Open the app through its https:// address instead of a plain http:// or network address.</p>
+      </section>
+    </main>
+  );
+}
+
 export function App() {
   const { ready, tab, go } = useStore();
+  if (!window.isSecureContext || !globalThis.crypto?.subtle) return <InsecureNotice />;
   if (!ready) return <div className="app" aria-busy="true" />;
 
   return (

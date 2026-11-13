@@ -11,6 +11,7 @@ export function NotesScreen() {
   const [text, setText] = useState(notesDraft?.text ?? '');
   const [prompt] = useState(notesDraft?.prompt);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     listNotes()
@@ -20,7 +21,14 @@ export function NotesScreen() {
 
   const save = async () => {
     if (!text.trim()) return;
-    const note = await addNote(text.trim(), prompt);
+    let note;
+    try {
+      note = await addNote(text.trim(), prompt);
+    } catch {
+      setError('This note could not be saved on this device. Nothing was lost; try again.');
+      return;
+    }
+    setError(null);
     setNotes((n) => [note, ...(n ?? [])]);
     setText('');
     setWriting(false);
@@ -49,6 +57,11 @@ export function NotesScreen() {
           rows={10}
           placeholder="Write here. It is encrypted on this device."
         />
+        {error && (
+          <p className="small" role="alert" style={{ color: 'var(--danger)' }}>
+            {error}
+          </p>
+        )}
         <div className="space" />
         <button className="btn" disabled={!text.trim()} onClick={() => void save()}>
           Keep it
