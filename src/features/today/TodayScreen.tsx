@@ -17,7 +17,7 @@ const CATEGORY_LABEL = {
 } as const;
 
 export function TodayScreen() {
-  const { todayEntry, challenge, tree, growTick, streak, today, complete, swap, addExtra } = useStore();
+  const { todayEntry, challenge, tree, growTick, streak, today, complete, swap, devFillHistory } = useStore();
   const [level, setLevel] = useState<Level>('easy');
   const [indoor, setIndoor] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -35,7 +35,7 @@ export function TodayScreen() {
     taps.current = [...taps.current.filter((t) => now - t < 1500), now];
     if (taps.current.length >= 5) {
       taps.current = [];
-      void addExtra(4, 2);
+      void devFillHistory();
     }
   };
 

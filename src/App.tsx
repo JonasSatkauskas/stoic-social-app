@@ -24,7 +24,7 @@ export function App() {
   return (
     <>
       <main className="app">
-        {tab !== 'settings' && (
+        {tab === 'today' && (
           <button className="corner" aria-label="Settings and backup" onClick={() => go('settings')}>
             <SettingsIcon />
           </button>

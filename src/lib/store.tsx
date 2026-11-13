@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { challengeById, challengeForDate, swapForDate } from '../features/today/challenges';
 import { bumpStreak } from '../features/today/streak';
 import { treeFromData } from '../features/tree/growth';
-import { dateKey } from './dates';
+import { addDays, dateKey } from './dates';
 import { loadSecure, loadStreak, requestPersistence, saveSecure, saveStreak, type Streak } from './db';
 import type { AppData, Challenge, DayEntry, Level, TreeState } from './types';
 
@@ -33,6 +33,8 @@ interface Store {
   pen(result: 'wrote' | 'skipped'): Promise<void>;
   setName(name: string): Promise<void>;
   addExtra(branch: number, root: number): Promise<void>;
+  /** Demo only: fill the five most recent empty past days with completions. */
+  devFillHistory(): Promise<void>;
   replaceData(data: AppData): Promise<void>;
 }
 
@@ -143,6 +145,24 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       async addExtra(branch, root) {
         const cur = dataRef.current;
         await persist({ ...cur, extra: { branch: cur.extra.branch + branch, root: cur.extra.root + root } }, true);
+      },
+      async devFillHistory() {
+        const cur = dataRef.current;
+        const days = { ...cur.days };
+        const levels: Level[] = ['easy', 'medium', 'brave'];
+        let added = 0;
+        for (let i = 1; added < 5 && i < 400; i++) {
+          const d = addDays(today, -i);
+          if (days[d]) continue;
+          days[d] = {
+            challengeId: challengeForDate(d).id,
+            swapped: false,
+            done: { level: levels[(i * 7) % 3], indoor: false, at: Date.now() },
+            pen: i % 4 === 0 ? 'skipped' : 'wrote',
+          };
+          added++;
+        }
+        await persist({ ...cur, days }, true);
       },
       async replaceData(next) {
         await persist(next, true);

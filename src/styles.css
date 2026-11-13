@@ -641,7 +641,8 @@ input:focus {
 
 .grove-scene {
   display: block;
-  height: 360px;
+  height: 256px;
+  margin-top: 1rem;
 }
 
 .grove-scene .hill {

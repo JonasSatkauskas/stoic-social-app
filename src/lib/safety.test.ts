@@ -12,6 +12,11 @@ describe('hasCrisisSigns', () => {
     'there is no reason to live',
     'I have been self-harming',
     'my partner hits me',
+    'I do not want to live anymore',
+    'I dont want to wake up tomorrow',
+    'I cannot go on like this',
+    'there is no point in living',
+    'I can\u2019t take it anymore',
   ])('flags: %s', (text) => {
     expect(hasCrisisSigns(text)).toBe(true);
   });
@@ -22,6 +27,8 @@ describe('hasCrisisSigns', () => {
     'this project is killing me slowly lol',
     'I had a fight with my sister',
     'I am worried about the exam',
+    'I do not want to go to work',
+    'I can go on a walk later',
   ])('does not flag: %s', (text) => {
     expect(hasCrisisSigns(text)).toBe(false);
   });

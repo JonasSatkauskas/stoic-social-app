@@ -231,7 +231,7 @@ export function Tree({ tree, seed = 7, growTick = 0, compact = false, label, cla
           </g>
           <g className="birds">
             {pickTips(birdCount, 2).map((t, i) => (
-              <path key={i} d={`M${t.x2 - 8} ${t.y2 - 10} q4 -5 8 0 q4 -5 8 0`} />
+              <path key={i} d={`M${t.x2 - 12} ${t.y2 - 12} q6 -7 12 0 q6 -7 12 0`} />
             ))}
           </g>
         </g>

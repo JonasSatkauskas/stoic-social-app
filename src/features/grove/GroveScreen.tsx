@@ -12,7 +12,8 @@ import { TrunkView } from './TrunkView';
 type View = { name: 'scene' } | { name: 'trunk'; fp: string } | { name: 'plant' };
 
 const SLOT = 128;
-const GROUND = 300;
+const GROUND = 196;
+const SCENE_H = 256;
 const TREE_W = 150;
 const TREE_RATIO = 226 / 300;
 
@@ -142,7 +143,7 @@ export default function GroveScreen() {
         <svg
           className="grove-scene"
           width={width}
-          viewBox={`0 0 ${width} 360`}
+          viewBox={`0 0 ${width} ${SCENE_H}`}
           style={
             zoom
               ? { transformOrigin: `${zoom.x}px ${zoom.y}px`, transform: 'scale(2.4)', opacity: 0.2, transition: 'transform 0.5s ease-in, opacity 0.5s ease-in' }
@@ -150,7 +151,7 @@ export default function GroveScreen() {
           }
         >
           <path className="far-hill" d={`M0 ${GROUND - 70} Q ${width * 0.25} ${GROUND - 105} ${width * 0.5} ${GROUND - 78} T ${width} ${GROUND - 82}`} />
-          <path className="hill" d={`M0 ${GROUND + 4} Q ${width * 0.3} ${GROUND - 12} ${width * 0.55} ${GROUND + 2} T ${width} ${GROUND} V 360 H 0 Z`} />
+          <path className="hill" d={`M0 ${GROUND + 4} Q ${width * 0.3} ${GROUND - 12} ${width * 0.55} ${GROUND + 2} T ${width} ${GROUND} V ${SCENE_H} H 0 Z`} />
 
           {slots.map((s, i) => {
             const x = xOf(i);
