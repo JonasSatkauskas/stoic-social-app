@@ -30,6 +30,10 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    // Lets phones reach the dev server through an HTTPS tunnel (cloudflared or ngrok).
+    allowedHosts: ['.trycloudflare.com', '.ngrok-free.app'],
+  },
   test: {
     environment: 'node',
   },
