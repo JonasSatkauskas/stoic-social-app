@@ -1,4 +1,11 @@
+import { existsSync, readFileSync } from 'node:fs';
 import { defineConfig } from 'vitest/config';
+
+// Optional self-signed cert for testing on phones over the local network.
+// Create with the openssl command in README.md; .cert/ is git-ignored.
+const devHttps = existsSync('.cert/key.pem') && existsSync('.cert/cert.pem')
+  ? { key: readFileSync('.cert/key.pem'), cert: readFileSync('.cert/cert.pem') }
+  : undefined;
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
@@ -31,6 +38,7 @@ export default defineConfig({
     }),
   ],
   server: {
+    https: devHttps,
     // Lets phones reach the dev server through an HTTPS tunnel (cloudflared or ngrok).
     allowedHosts: ['.trycloudflare.com', '.ngrok-free.app'],
   },

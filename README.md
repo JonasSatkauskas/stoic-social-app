@@ -12,8 +12,17 @@ npm run build      # production build in dist/
 npm run preview    # serve dist/ locally
 ```
 
-Phones need HTTPS for the camera and service worker. Quickest way while building:
-`cloudflared tunnel --url http://localhost:5173`, then open the HTTPS link on the phone.
+Phones need HTTPS for encryption, the camera and the service worker. Two options:
+
+- **Local network, self-signed cert:** create a cert for your laptop's IP, then `npm run dev` serves HTTPS.
+  ```bash
+  mkdir -p .cert && openssl req -x509 -newkey rsa:2048 -nodes -days 30 \
+    -keyout .cert/key.pem -out .cert/cert.pem -subj "/CN=less-phone-dev" \
+    -addext "subjectAltName=IP:<your-laptop-ip>,DNS:localhost,IP:127.0.0.1"
+  ```
+  Open `https://<your-laptop-ip>:5173` on the phone and accept the warning once (Advanced → Proceed).
+  Offline mode and install do not work with a self-signed cert; use a deploy for that.
+- **Tunnel:** `cloudflared tunnel --url http://localhost:5173` (delete `.cert/` first so the dev server speaks plain HTTP).
 
 ## Grove relay (Firebase Firestore, optional)
 
