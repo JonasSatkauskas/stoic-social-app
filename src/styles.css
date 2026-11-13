@@ -1,0 +1,1022 @@
+:root {
+  --paper: #f4efe4;
+  --paper-2: #ebe4d5;
+  --stone: #8a8478;
+  --stone-light: #d8d1c2;
+  --stone-fill: #e2dbcc;
+  --olive: #4f5b32;
+  --olive-light: #7d8a5a;
+  --ink: #2b2a26;
+  --ink-soft: #55524a;
+  --bark: #4a3f33;
+  --root: #7a6c5a;
+  --flower: #f8f4ea;
+  --fruit: #a2563a;
+  --lantern: #d9a441;
+  --danger: #8c3b2e;
+
+  --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --line: 1px solid var(--stone-light);
+  --radius: 14px;
+  --nav-h: 64px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #23221f;
+    --paper-2: #2c2b27;
+    --stone: #9d968a;
+    --stone-light: #45423c;
+    --stone-fill: #3a3833;
+    --olive: #a3b07a;
+    --olive-light: #7f8b5b;
+    --ink: #ece4d3;
+    --ink-soft: #c2baa8;
+    --bark: #cbbba3;
+    --root: #a0927d;
+    --flower: #f1ead9;
+    --fruit: #c97a5a;
+    --lantern: #e8b85a;
+    --danger: #d58a7a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+h1,
+h2,
+h3,
+.serif {
+  font-family: var(--serif);
+  font-weight: normal;
+  letter-spacing: 0.005em;
+}
+
+h1 {
+  font-size: 1.9rem;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+}
+
+h2 {
+  font-size: 1.45rem;
+  line-height: 1.25;
+  margin: 0 0 0.5rem;
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+a {
+  color: var(--olive);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- layout ---------- */
+
+.app {
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  padding: 0 22px calc(var(--nav-h) + var(--safe-bottom) + 24px);
+  position: relative;
+}
+
+.screen {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 28px);
+  animation: screen-in 0.35s ease-out;
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.center {
+  text-align: center;
+}
+
+.muted {
+  color: var(--stone);
+}
+
+.small {
+  font-size: 0.88rem;
+}
+
+.space {
+  height: 2rem;
+}
+
+.eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 0.4rem;
+}
+
+.rule {
+  border: 0;
+  border-top: var(--line);
+  margin: 2rem 0;
+}
+
+/* ---------- nav ---------- */
+
+.nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--nav-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: var(--paper);
+  border-top: var(--line);
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+
+.nav-inner {
+  display: flex;
+  width: 100%;
+  max-width: 520px;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav button {
+  background: none;
+  border: 0;
+  width: 64px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  color: var(--stone);
+  cursor: pointer;
+  border-radius: 12px;
+  position: relative;
+}
+
+.nav button[aria-current='page'] {
+  color: var(--ink);
+}
+
+.nav button[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--olive);
+}
+
+.nav svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.corner {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  right: 12px;
+  background: none;
+  border: 0;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--stone);
+  cursor: pointer;
+  z-index: 2;
+}
+
+.corner svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+/* ---------- buttons ---------- */
+
+.btn {
+  display: block;
+  width: 100%;
+  min-height: 56px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  padding: 0 24px;
+  transition: transform 0.1s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.btn.quiet {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--stone-light);
+}
+
+.link {
+  background: none;
+  border: 0;
+  color: var(--stone);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  cursor: pointer;
+  padding: 12px 8px;
+  min-height: 44px;
+  font-size: 0.95rem;
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--olive);
+  outline-offset: 3px;
+}
+
+/* ---------- stepping stones ---------- */
+
+.stones {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 1.25rem 0;
+}
+
+.stone {
+  flex: 1;
+  max-width: 120px;
+  min-height: 60px;
+  border: 1.5px solid var(--stone-light);
+  background: var(--stone-fill);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 0.98rem;
+  padding: 10px 6px;
+  border-radius: 48% 52% 46% 54% / 58% 50% 50% 42%;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.15s;
+}
+
+.stone:nth-child(2) {
+  border-radius: 54% 46% 52% 48% / 46% 56% 44% 54%;
+}
+
+.stone:nth-child(3) {
+  border-radius: 46% 54% 58% 42% / 52% 44% 56% 48%;
+}
+
+.stone[aria-pressed='true'],
+.stone.chosen {
+  background: var(--olive);
+  border-color: var(--olive);
+  color: var(--paper);
+}
+
+.stone:active {
+  transform: scale(0.96);
+}
+
+/* ---------- tree ---------- */
+
+.tree {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.tree .soil {
+  stroke: var(--stone);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.tree .grass path,
+.tree .grass {
+  stroke: var(--stone);
+  stroke-width: 1;
+  fill: none;
+  stroke-linecap: round;
+}
+
+.tree .roots path {
+  stroke: var(--root);
+  stroke-width: 1.3;
+  fill: none;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.tree .branches path,
+.tree .stem {
+  stroke: var(--bark);
+  fill: none;
+  stroke-linecap: round;
+}
+
+.tree .stem {
+  stroke-width: 2;
+}
+
+.tree .seed {
+  fill: var(--bark);
+}
+
+.tree .leaf,
+.tree .leaves ellipse {
+  fill: var(--olive-light);
+  stroke: var(--olive);
+  stroke-width: 0.8;
+  opacity: 0.85;
+}
+
+.tree .flowers circle {
+  fill: var(--flower);
+  stroke: var(--ink-soft);
+  stroke-width: 0.9;
+}
+
+.tree .fruit circle {
+  fill: var(--fruit);
+  stroke: var(--ink);
+  stroke-width: 0.6;
+}
+
+.tree .birds path,
+.tree .bench path {
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tree .draw-in {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 1.6s ease-out 0.2s forwards;
+}
+
+.tree .fade-in {
+  animation: fade 1.4s ease-out 0.9s both;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- today ---------- */
+
+.today-tree {
+  margin: 0 auto 0.5rem;
+  max-width: 280px;
+}
+
+.resting {
+  text-align: center;
+  color: var(--stone);
+  font-family: var(--serif);
+  font-style: italic;
+  margin: 0 0 1.5rem;
+}
+
+.challenge {
+  text-align: center;
+}
+
+.challenge .why {
+  color: var(--ink-soft);
+  font-family: var(--serif);
+  font-style: italic;
+}
+
+.level-text {
+  min-height: 4.5em;
+  font-size: 1.08rem;
+  text-align: center;
+  margin: 0 0 1.25rem;
+}
+
+.done-message {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* ---------- pen moment ---------- */
+
+.pen {
+  min-height: calc(100dvh - var(--nav-h) - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pen .prompt {
+  font-family: var(--serif);
+  font-size: 1.65rem;
+  line-height: 1.3;
+  text-align: center;
+  margin: 0 0 1.5rem;
+}
+
+.ink-line {
+  width: 100%;
+  height: 40px;
+  overflow: visible;
+  margin: 2rem 0;
+}
+
+.ink-line path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.ink-line .track {
+  stroke: var(--stone-light);
+  stroke-width: 1;
+  stroke-dasharray: 2 6;
+}
+
+/* ---------- talk ---------- */
+
+.talk-label {
+  font-size: 0.85rem;
+  color: var(--stone);
+  text-align: center;
+}
+
+.bubble-you {
+  color: var(--ink-soft);
+  border-left: 2px solid var(--stone-light);
+  padding-left: 14px;
+  margin: 0 0 1.25rem;
+  white-space: pre-wrap;
+}
+
+.question {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  line-height: 1.3;
+  margin: 1rem 0 1.5rem;
+}
+
+textarea,
+input[type='text'],
+input[type='password'] {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid var(--stone-light);
+  border-radius: 0;
+  padding: 10px 2px;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+  min-height: 8em;
+  line-height: 1.6;
+  background-image: linear-gradient(transparent calc(1.6em - 1px), var(--stone-light) 1px);
+  background-size: 100% 1.6em;
+  background-attachment: local;
+  border-bottom: 0;
+}
+
+textarea:focus,
+input:focus {
+  border-color: var(--olive);
+}
+
+.quote {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-soft);
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.quote cite {
+  display: block;
+  font-style: normal;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--stone);
+  margin-top: 0.4rem;
+}
+
+.close-steps {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.close-steps li {
+  border-top: var(--line);
+  padding: 1.1rem 0;
+}
+
+.close-steps li:last-child {
+  border-bottom: var(--line);
+}
+
+/* ---------- notes ---------- */
+
+.note {
+  border-top: var(--line);
+  padding: 1rem 0;
+}
+
+.note-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--stone);
+  font-size: 0.85rem;
+}
+
+.note-text {
+  white-space: pre-wrap;
+  margin: 0.25rem 0 0;
+}
+
+/* ---------- grove ---------- */
+
+.grove-scroll {
+  margin: 0 -22px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.grove-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.grove-scene {
+  display: block;
+  height: 360px;
+}
+
+.grove-scene .hill {
+  fill: var(--paper-2);
+  stroke: var(--stone);
+  stroke-width: 1;
+}
+
+.grove-scene .far-hill {
+  fill: none;
+  stroke: var(--stone-light);
+  stroke-width: 1;
+}
+
+.grove-scene .mist {
+  fill: var(--paper);
+}
+
+.grove-scene .name {
+  font-family: var(--serif);
+  font-size: 13px;
+  fill: var(--ink-soft);
+  text-anchor: middle;
+}
+
+.grove-scene .plot {
+  cursor: pointer;
+}
+
+.grove-scene .plot-soil {
+  fill: none;
+  stroke: var(--stone);
+  stroke-width: 1.2;
+  stroke-dasharray: 3 5;
+}
+
+.grove-scene .friend {
+  cursor: pointer;
+}
+
+.grove-scene .lantern-glow {
+  fill: var(--lantern);
+  opacity: 0.25;
+  animation: glow 3.5s ease-in-out infinite;
+}
+
+.grove-scene .lantern {
+  fill: var(--lantern);
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.grove-scene .pebble {
+  fill: var(--stone);
+  stroke: var(--ink);
+  stroke-width: 0.6;
+}
+
+@keyframes glow {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.trunk svg {
+  width: 100%;
+  max-width: 360px;
+  display: block;
+  margin: 0 auto;
+}
+
+.trunk .ring {
+  fill: none;
+  stroke: var(--bark);
+  stroke-width: 0.8;
+  opacity: 0.5;
+}
+
+.trunk .bark {
+  fill: none;
+  stroke: var(--bark);
+  stroke-width: 3;
+}
+
+.trunk .segment {
+  cursor: pointer;
+  stroke: var(--paper);
+  stroke-width: 1;
+}
+
+.trunk .segment.empty {
+  fill: transparent;
+  cursor: default;
+}
+
+.trunk .segment.selected {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+
+.card {
+  border: var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  background: var(--paper-2);
+  animation: rise 0.3s ease-out;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--stone);
+  margin: 0.5rem 0 1rem;
+}
+
+.legend span::before {
+  content: '';
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 5px;
+  background: var(--c);
+  vertical-align: 0;
+}
+
+/* plant ritual */
+
+.flip {
+  perspective: 1200px;
+  width: min(100%, 340px);
+  aspect-ratio: 1 / 1.15;
+  margin: 1rem auto;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s ease;
+  transform-style: preserve-3d;
+}
+
+.flip.flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: var(--line);
+  border-radius: 22px;
+  background: var(--paper-2);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.flip-face.back {
+  transform: rotateY(180deg);
+  background: #111;
+}
+
+.qr-ring {
+  position: relative;
+  width: 82%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+
+.qr-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--olive);
+  border-radius: 50%;
+  animation: breathe 5s ease-in-out infinite;
+}
+
+.qr-ring canvas {
+  width: 66% !important;
+  height: auto !important;
+  border-radius: 6px;
+  background: #fff;
+  padding: 8px;
+}
+
+@keyframes breathe {
+  50% {
+    transform: scale(1.06);
+    opacity: 0.45;
+  }
+}
+
+.camera {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.words {
+  font-family: var(--serif);
+  font-size: 2.1rem;
+  text-align: center;
+  line-height: 1.4;
+  margin: 2rem 0;
+}
+
+.words span {
+  display: block;
+}
+
+.planting {
+  display: block;
+  width: 200px;
+  margin: 1rem auto;
+}
+
+.planting .seed-drop {
+  fill: var(--bark);
+  animation: drop 1s ease-in forwards;
+}
+
+.planting .sapling {
+  fill: none;
+  stroke: var(--olive);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 1.4s ease-out 1s forwards;
+}
+
+.planting .sapling-leaf {
+  fill: var(--olive-light);
+  animation: fade 0.8s ease-out 2.1s both;
+}
+
+@keyframes drop {
+  from {
+    transform: translateY(-90px);
+  }
+}
+
+.planting .soil {
+  stroke: var(--stone);
+  stroke-width: 1.2;
+}
+
+.help-list {
+  padding-left: 1.1rem;
+}
+
+.help-list li {
+  margin-bottom: 0.6rem;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--nav-h) + var(--safe-bottom) + 14px);
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 14px 10px 18px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 20;
+  font-size: 0.92rem;
+  max-width: calc(100% - 32px);
+}
+
+.toast button {
+  background: var(--paper);
+  color: var(--ink);
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.dev-button {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  left: 6px;
+  width: 44px;
+  height: 44px;
+  opacity: 0;
+  border: 0;
+  background: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------- print: weekly pen sheet ---------- */
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-only,
+  .print-only * {
+    visibility: visible;
+  }
+  .print-only {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: #000;
+  }
+  .nav,
+  .toast,
+  .corner {
+    display: none !important;
+  }
+  .sheet h1 {
+    font-size: 18pt;
+    margin-bottom: 4mm;
+  }
+  .sheet-day {
+    break-inside: avoid;
+    margin-bottom: 4mm;
+  }
+  .sheet-day h3 {
+    font-size: 11pt;
+    margin: 0;
+  }
+  .sheet-day p {
+    font-size: 10pt;
+    margin: 1mm 0 2mm;
+    font-family: var(--serif);
+    font-style: italic;
+  }
+  .sheet-lines {
+    height: 18mm;
+    background-image: linear-gradient(transparent 5.5mm, #999 5.5mm, #999 5.7mm, transparent 5.7mm);
+    background-size: 100% 6mm;
+  }
+}
