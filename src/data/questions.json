@@ -2,7 +2,25 @@
   "topics": [
     {
       "id": "work",
-      "keywords": ["work","job","boss","colleague","deadline","project","career","office","meeting","school","exam","study","manager","client","task","money","salary"],
+      "keywords": [
+        "work",
+        "job",
+        "boss",
+        "colleague",
+        "deadline",
+        "project",
+        "career",
+        "office",
+        "meeting",
+        "school",
+        "exam",
+        "study",
+        "manager",
+        "client",
+        "task",
+        "money",
+        "salary"
+      ],
       "questions": [
         "Which part of this is up to you, and which part is not?",
         "What is the fact here, and what is the story you are adding to it?",
@@ -12,7 +30,31 @@
     },
     {
       "id": "relationships",
-      "keywords": ["friend","partner","wife","husband","boyfriend","girlfriend","mother","father","mom","mum","dad","parent","family","brother","sister","sibling","relationship","argument","fight","lonely","alone","love","ex"],
+      "keywords": [
+        "friend",
+        "partner",
+        "wife",
+        "husband",
+        "boyfriend",
+        "girlfriend",
+        "mother",
+        "father",
+        "mom",
+        "mum",
+        "dad",
+        "parent",
+        "family",
+        "brother",
+        "sister",
+        "sibling",
+        "relationship",
+        "argument",
+        "fight",
+        "lonely",
+        "alone",
+        "love",
+        "ex"
+      ],
       "questions": [
         "What did they actually do or say, before you decided what it meant?",
         "What would you say to them if you knew they would listen calmly?",
@@ -22,7 +64,23 @@
     },
     {
       "id": "worry",
-      "keywords": ["worry","worried","anxious","anxiety","afraid","fear","scared","nervous","what if","future","uncertain","panic","stress","stressed","overthinking"],
+      "keywords": [
+        "worry",
+        "worried",
+        "anxious",
+        "anxiety",
+        "afraid",
+        "fear",
+        "scared",
+        "nervous",
+        "what if",
+        "future",
+        "uncertain",
+        "panic",
+        "stress",
+        "stressed",
+        "overthinking"
+      ],
       "questions": [
         "What has actually happened so far, and what has only happened in your head?",
         "If the thing you fear happened, what would you do first?",
@@ -32,7 +90,21 @@
     },
     {
       "id": "anger",
-      "keywords": ["angry","anger","mad","furious","annoyed","irritated","hate","unfair","rude","frustrated","frustrating","rage","pissed"],
+      "keywords": [
+        "angry",
+        "anger",
+        "mad",
+        "furious",
+        "annoyed",
+        "irritated",
+        "hate",
+        "unfair",
+        "rude",
+        "frustrated",
+        "frustrating",
+        "rage",
+        "pissed"
+      ],
       "questions": [
         "What judgment are you making about what happened, apart from what happened?",
         "What would a calm version of you do next?",
@@ -42,7 +114,22 @@
     },
     {
       "id": "tired",
-      "keywords": ["tired","exhausted","sleep","sleepy","burnout","burned out","burnt out","drained","no energy","lazy","unmotivated","bored","boring","numb"],
+      "keywords": [
+        "tired",
+        "exhausted",
+        "sleep",
+        "sleepy",
+        "burnout",
+        "burned out",
+        "burnt out",
+        "drained",
+        "no energy",
+        "lazy",
+        "unmotivated",
+        "bored",
+        "boring",
+        "numb"
+      ],
       "questions": [
         "What is the smallest thing your body is asking for right now?",
         "Which of today's \"I have to\" could you put down for one day?",
@@ -68,10 +155,30 @@
     "What would you want to remember about this a week from now?"
   ],
   "quotes": [
-    { "text": "Of things some are in our power, and others are not.", "author": "Epictetus", "work": "Enchiridion, 1, tr. George Long" },
-    { "text": "Men are disturbed not by the things which happen, but by the opinions about the things.", "author": "Epictetus", "work": "Enchiridion, 5, tr. George Long" },
-    { "text": "We suffer more often in imagination than in reality.", "author": "Seneca", "work": "Moral Letters to Lucilius, 13, tr. Richard M. Gummere" },
-    { "text": "Such as are thy habitual thoughts, such also will be the character of thy mind.", "author": "Marcus Aurelius", "work": "Meditations, V.16, tr. George Long" },
-    { "text": "Remember this, that very little is needed to make a happy life.", "author": "Marcus Aurelius", "work": "Meditations, VII.67, tr. George Long" }
+    {
+      "text": "Of things some are in our power, and others are not.",
+      "author": "Epictetus",
+      "work": "Enchiridion, 1, tr. George Long"
+    },
+    {
+      "text": "Men are disturbed not by the things which happen, but by the opinions about the things.",
+      "author": "Epictetus",
+      "work": "Enchiridion, 5, tr. George Long"
+    },
+    {
+      "text": "We suffer more often in imagination than in reality.",
+      "author": "Seneca",
+      "work": "Moral Letters to Lucilius, 13, tr. Richard M. Gummere"
+    },
+    {
+      "text": "Such as are thy habitual thoughts, such also will be the character of thy mind.",
+      "author": "Marcus Aurelius",
+      "work": "Meditations, V.16, tr. George Long"
+    },
+    {
+      "text": "Very little indeed is necessary for living a happy life.",
+      "author": "Marcus Aurelius",
+      "work": "Meditations, VII.67, tr. George Long"
+    }
   ]
 }

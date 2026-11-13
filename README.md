@@ -47,6 +47,10 @@ Add a SPA rewrite if the host needs one (all routes → `/index.html`); the app 
 - Open the app with `?demo` at the end of the address (e.g. `https://.../?demo`). Then tap the invisible square in the top-left of Today five times quickly: adds five past days of challenges and writing, so the cairn, visitors and rings fill in. Settings → Remove demo days takes them out again.
 - Crisis path test: in Talk, type "I do not want to live anymore". The help screen appears and the flow ends.
 
+## Quotes
+
+"A line to carry" (Done screen, and after a gap) comes from `src/data/lines.json`. After editing quotes, run `python3 tools/verify-quotes.py`: it downloads the public-domain sources once into `.sources/` and checks every quote word for word, including Marcus Aurelius book numbers.
+
 ## Privacy model
 
 - Device key: non-extractable AES-GCM key in IndexedDB. Notes, day log, cairn, friends are all stored encrypted. Only the streak is plain.

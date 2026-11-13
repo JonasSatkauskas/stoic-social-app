@@ -1,0 +1,250 @@
+[
+ {
+  "id": "l1",
+  "theme": "outside",
+  "text": "Look round at the courses of the stars, as if thou wert going along with them.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, VII.47, tr. George Long",
+  "practice": "Look up once today, and stay with the sky for a minute."
+ },
+ {
+  "id": "l2",
+  "theme": "outside",
+  "text": "The eye is the first circle; the horizon which it forms is the second.",
+  "author": "Ralph Waldo Emerson",
+  "work": "Essays, Circles",
+  "practice": "Find the furthest point you can see, and let your eyes rest there."
+ },
+ {
+  "id": "l3",
+  "theme": "outside",
+  "text": "Very little indeed is necessary for living a happy life.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, VII.67, tr. George Long",
+  "practice": "Notice one free thing outside that made today better."
+ },
+ {
+  "id": "l4",
+  "theme": "people",
+  "text": "Men exist for the sake of one another. Teach them then, or bear with them.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, VIII.59, tr. George Long",
+  "practice": "Be patient with one person who tries your patience today."
+ },
+ {
+  "id": "l5",
+  "theme": "people",
+  "text": "The only reward of virtue is virtue; the only way to have a friend is to be one.",
+  "author": "Ralph Waldo Emerson",
+  "work": "Essays, Self-Reliance",
+  "practice": "Do one thing a good friend would do, without being asked."
+ },
+ {
+  "id": "l6",
+  "theme": "people",
+  "text": "If you would be loved, love.",
+  "author": "Seneca, quoting Hecato",
+  "work": "Moral Letters to Lucilius, 9, tr. Richard M. Gummere",
+  "practice": "Show one person, plainly, that they matter to you."
+ },
+ {
+  "id": "l7",
+  "theme": "people",
+  "text": "When thou wishest to delight thyself, think of the virtues of those who live with thee.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, VI.48, tr. George Long",
+  "practice": "Name one good quality in each person you live or work with."
+ },
+ {
+  "id": "l8",
+  "theme": "people",
+  "text": "Associate with those who will make a better man of you. Welcome those whom you yourself can improve.",
+  "author": "Seneca",
+  "work": "Moral Letters to Lucilius, 7, tr. Richard M. Gummere",
+  "practice": "Spend some time today with someone who makes you better."
+ },
+ {
+  "id": "l9",
+  "theme": "unplug",
+  "text": "Hold every hour in your grasp.",
+  "author": "Seneca",
+  "work": "Moral Letters to Lucilius, 1, tr. Richard M. Gummere",
+  "practice": "Pick one hour today and give it to one thing."
+ },
+ {
+  "id": "l10",
+  "theme": "unplug",
+  "text": "Nothing, Lucilius, is ours, except time.",
+  "author": "Seneca",
+  "work": "Moral Letters to Lucilius, 1, tr. Richard M. Gummere",
+  "practice": "Notice where your time went today, without judging it."
+ },
+ {
+  "id": "l11",
+  "theme": "unplug",
+  "text": "Everywhere means nowhere.",
+  "author": "Seneca",
+  "work": "Moral Letters to Lucilius, 2, tr. Richard M. Gummere",
+  "practice": "Close everything but one thing, and stay with it."
+ },
+ {
+  "id": "l12",
+  "theme": "unplug",
+  "text": "Nowhere either with more quiet or more freedom from trouble does a man retire than into his own soul.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, IV.3, tr. George Long",
+  "practice": "Sit for two minutes with no input at all."
+ },
+ {
+  "id": "l13",
+  "theme": "unplug",
+  "text": "How much trouble he avoids who does not look to see what his neighbor says or does or thinks, but only to what he does himself.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, IV.18, tr. George Long",
+  "practice": "Skip one look at what other people are doing today."
+ },
+ {
+  "id": "l14",
+  "theme": "notice",
+  "text": "Look within. Let neither the peculiar quality of anything nor its value escape thee.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, VI.3, tr. George Long",
+  "practice": "Look at one ordinary thing until you see something new in it."
+ },
+ {
+  "id": "l15",
+  "theme": "notice",
+  "text": "Wipe out the imagination. Stop the pulling of the strings. Confine thyself to the present.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, VII.29, tr. George Long",
+  "practice": "When your mind runs ahead today, name what is in front of you."
+ },
+ {
+  "id": "l16",
+  "theme": "notice",
+  "text": "Men are disturbed not by the things which happen, but by the opinions about the things.",
+  "author": "Epictetus",
+  "work": "Enchiridion, V, tr. George Long",
+  "practice": "Write down one fact from today, and the opinion you added to it."
+ },
+ {
+  "id": "l17",
+  "theme": "notice",
+  "text": "Take away thy opinion, and then there is taken away the complaint, \"I have been harmed.\"",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, IV.7, tr. George Long",
+  "practice": "Catch one complaint today before you say it."
+ },
+ {
+  "id": "l18",
+  "theme": "notice",
+  "text": "Such as are thy habitual thoughts, such also will be the character of thy mind; for the soul is dyed by the thoughts.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, V.16, tr. George Long",
+  "practice": "Notice the thought you return to most today."
+ },
+ {
+  "id": "l19",
+  "theme": "body",
+  "text": "In the morning when thou risest unwillingly, let this thought be present,—I am rising to the work of a human being.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, V.1, tr. George Long",
+  "practice": "Do the first hard thing of the day before you think about it."
+ },
+ {
+  "id": "l20",
+  "theme": "body",
+  "text": "Set aside a certain number of days, during which you shall be content with the scantiest and cheapest fare, with coarse and rough dress, saying to yourself the while: \"Is this the condition that I feared?\"",
+  "author": "Seneca",
+  "work": "Moral Letters to Lucilius, 18, tr. Richard M. Gummere",
+  "practice": "Choose one small discomfort today and ask the same question."
+ },
+ {
+  "id": "l21",
+  "theme": "body",
+  "text": "A cucumber is bitter—Throw it away.—There are briers in the road—Turn aside from them.—This is enough.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, VIII.50, tr. George Long",
+  "practice": "Meet one inconvenience today without complaining about it."
+ },
+ {
+  "id": "l22",
+  "theme": "body",
+  "text": "The art of life is more like the wrestler's art than the dancer's.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, VII.61, tr. George Long",
+  "practice": "When something surprises you today, take one breath before you react."
+ },
+ {
+  "id": "l23",
+  "theme": "create",
+  "text": "Trust thyself: every heart vibrates to that iron string.",
+  "author": "Ralph Waldo Emerson",
+  "work": "Essays, Self-Reliance",
+  "practice": "Make something today without asking anyone's opinion first."
+ },
+ {
+  "id": "l24",
+  "theme": "create",
+  "text": "Insist on yourself; never imitate.",
+  "author": "Ralph Waldo Emerson",
+  "work": "Essays, Self-Reliance",
+  "practice": "Do one thing your own way, even if it is slower."
+ },
+ {
+  "id": "l25",
+  "theme": "create",
+  "text": "Do your work, and you shall reinforce yourself.",
+  "author": "Ralph Waldo Emerson",
+  "work": "Essays, Self-Reliance",
+  "practice": "Finish one small piece of work completely."
+ },
+ {
+  "id": "l26",
+  "theme": "create",
+  "text": "Lay hold of to-day's task, and you will not need to depend so much upon to-morrow's.",
+  "author": "Seneca",
+  "work": "Moral Letters to Lucilius, 1, tr. Richard M. Gummere",
+  "practice": "Do today's task before you plan tomorrow's."
+ },
+ {
+  "id": "l27",
+  "theme": "create",
+  "text": "What I must do is all that concerns me, not what the people think.",
+  "author": "Ralph Waldo Emerson",
+  "work": "Essays, Self-Reliance",
+  "practice": "Do one thing today without checking how it will look."
+ },
+ {
+  "id": "l28",
+  "theme": "return",
+  "text": "When thou hast failed, return back again, and be content if the greater part of what thou doest is consistent with man's nature.",
+  "author": "Marcus Aurelius",
+  "work": "Meditations, V.9, tr. George Long",
+  "practice": "Do today's challenge at Easy. That is a return."
+ },
+ {
+  "id": "l29",
+  "theme": "return",
+  "text": "We suffer more often in imagination than in reality.",
+  "author": "Seneca",
+  "work": "Moral Letters to Lucilius, 13, tr. Richard M. Gummere",
+  "practice": "Name what you feared about starting again. Then start small."
+ },
+ {
+  "id": "l30",
+  "theme": "return",
+  "text": "Nothing can bring you peace but yourself.",
+  "author": "Ralph Waldo Emerson",
+  "work": "Essays, Self-Reliance",
+  "practice": "Begin with one small thing that is yours to do."
+ },
+ {
+  "id": "l31",
+  "theme": "return",
+  "text": "Of things some are in our power, and others are not.",
+  "author": "Epictetus",
+  "work": "Enchiridion, I, tr. George Long",
+  "practice": "The missed days are not in your power. Today is."
+ }
+]

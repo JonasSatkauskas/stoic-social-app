@@ -6,6 +6,8 @@ import { PenMoment } from '../pen/PenMoment';
 import { Cairn } from '../cairn/Cairn';
 import { LEVEL_LABEL } from './challenges';
 import { demoModeEnabled } from './demo';
+import { LineToCarry } from './LineToCarry';
+import { lineForDay, returnLine } from './lines';
 import { currentStreak, isResting } from './streak';
 
 const LEVELS: Level[] = ['easy', 'medium', 'brave'];
@@ -47,21 +49,24 @@ export function TodayScreen() {
   };
 
   return (
-    <section className="screen" aria-labelledby="today-title">
+    <section className={`screen ${done ? 'done-screen' : ''}`} aria-labelledby="today-title">
       {demoModeEnabled() && <button className="dev-button" aria-hidden="true" tabIndex={-1} onClick={devTap} />}
-      <Cairn cairn={cairn} growTick={growTick} recent={thisWeek} className="today-cairn" />
+      <Cairn cairn={cairn} growTick={growTick} recent={thisWeek} className={`today-cairn ${done ? 'small' : resting ? 'resting-size' : ''}`} />
 
       {done ? (
         <div className="done-message">
           <h1 id="today-title">Done. That was yours to do, and you did it.</h1>
           <p className="muted">{todayEntry.pen === 'wrote' ? 'A stone placed, and what you wrote carved into it.' : 'A stone placed today.'}</p>
-          <div className="space" />
+          <LineToCarry line={lineForDay(today, challenge.category)} />
           <p className="serif">Done for today. See you tomorrow.</p>
         </div>
       ) : (
         <>
           {resting ? (
-            <p className="resting">Your cairn stands. Today is enough.</p>
+            <div className="resting">
+              <p>Your cairn stands. Today is enough.</p>
+              <LineToCarry line={returnLine(today)} compact />
+            </div>
           ) : days > 1 ? (
             <p className="resting">{days} days in a row.</p>
           ) : null}

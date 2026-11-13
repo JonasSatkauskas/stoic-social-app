@@ -56,7 +56,7 @@ Stoic calm and rational psychology, based on Janette Rainwater's self-therapy me
 - Observation before interpretation (Rainwater's self-observation).
 - Examples: "Done. That was yours to do, and you did it." / "Your cairn stands. Today is enough." / "What part of this is up to you?" / "Placed. You met in person today." / "Meet again to add a stone to this friendship."
 - Pen prompt types to rotate: awareness ("Right now I notice..."), responsibility ("I have to" → "I choose to"), fact vs judgment, control (up to me / not up to me), evening review, unsent letter, view from above.
-- Stoic quotes only from public-domain translations, quoted faithfully with author and work. Rainwater's methods in our own words, credited, never copied from her books.
+- Quotes only from public-domain texts, quoted faithfully with author and work: the Stoics (Marcus Aurelius and Epictetus tr. George Long, Seneca tr. Gummere) and Ralph Waldo Emerson. Every quote in src/data/lines.json and questions.json must pass `python3 tools/verify-quotes.py`, which checks it word for word against the source texts. Each line to carry has one practice sentence in our own voice. Rainwater's methods in our own words, credited, never copied from her books.
 - No religious or spiritual framing in the app's own voice.
 
 ### Visual

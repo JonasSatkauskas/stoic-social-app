@@ -494,6 +494,72 @@ button {
   margin: 0 0 1.5rem;
 }
 
+.resting p {
+  margin: 0;
+}
+
+.today-cairn.small {
+  max-width: 190px;
+}
+
+.today-cairn.resting-size {
+  max-width: 170px;
+  margin-bottom: 0;
+}
+
+/* A line to carry */
+.carry {
+  margin: 1.75rem 0 1.5rem;
+  padding: 1.25rem 0 0;
+  border-top: var(--line);
+  text-align: center;
+}
+
+.carry blockquote {
+  margin: 0.25rem 0 0.5rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.12rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.carry figcaption {
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.78rem;
+  color: var(--stone);
+}
+
+.carry cite {
+  font-style: normal;
+}
+
+.carry-practice {
+  margin: 0.75rem auto 0;
+  max-width: 30ch;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.carry.compact {
+  margin: 0.6rem auto 0;
+  padding-top: 0.7rem;
+  max-width: 34ch;
+}
+
+.carry.compact blockquote {
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+
+.carry.compact .carry-practice {
+  font-size: 0.88rem;
+  margin-top: 0.5rem;
+}
+
 .challenge {
   text-align: center;
 }
@@ -1091,5 +1157,51 @@ input:focus {
     height: 18mm;
     background-image: linear-gradient(transparent 5.5mm, #999 5.5mm, #999 5.7mm, transparent 5.7mm);
     background-size: 100% 6mm;
+  }
+}
+
+/* Short screens: the Done screen must fit without scrolling. */
+@media (max-height: 760px) {
+  .done-screen {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
+  }
+  .done-screen .today-cairn.small {
+    max-width: 140px;
+  }
+  .done-screen h1 {
+    font-size: 1.45rem;
+  }
+  .done-screen .carry {
+    margin: 1rem 0 0.75rem;
+    padding-top: 0.9rem;
+  }
+  .done-screen .carry blockquote {
+    font-size: 1rem;
+  }
+  .done-screen .carry-practice {
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-height: 620px) {
+  .done-screen .today-cairn.small {
+    max-width: 96px;
+  }
+  .done-screen h1 {
+    font-size: 1.25rem;
+  }
+  .done-screen .done-message > .muted,
+  .done-screen .carry .eyebrow {
+    display: none;
+  }
+  .done-screen .carry blockquote {
+    font-size: 0.95rem;
+  }
+  .done-screen .carry-practice {
+    font-size: 0.88rem;
+  }
+  .done-screen .done-message > .serif {
+    margin: 0;
+    font-size: 0.95rem;
   }
 }
