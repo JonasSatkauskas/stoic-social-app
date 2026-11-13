@@ -55,8 +55,11 @@ export function NotesScreen() {
           value={text}
           onChange={(e) => setText(e.target.value)}
           rows={10}
-          placeholder="Write here. It is encrypted on this device."
+          placeholder="Write here."
         />
+        <p className="field-hint">
+          <span>Encrypted on this device.</span>
+        </p>
         {error && (
           <p className="small" role="alert" style={{ color: 'var(--danger)' }}>
             {error}

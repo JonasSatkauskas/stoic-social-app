@@ -139,6 +139,9 @@ export function TalkScreen() {
         rows={6}
         placeholder={asking ? 'Your answer' : 'What happened?'}
       />
+      <p className="field-hint">
+        <span>Not stored, not sent.</span>
+      </p>
       <div className="space" />
       <button className="btn" disabled={!text.trim()} onClick={submit}>
         {asking ? 'Answer' : 'Go on'}
@@ -150,9 +153,6 @@ export function TalkScreen() {
           </button>
         </div>
       )}
-      <p className="center muted small" style={{ marginTop: '1.5rem' }}>
-        Nothing you write here is stored or sent anywhere.
-      </p>
     </section>
   );
 }
