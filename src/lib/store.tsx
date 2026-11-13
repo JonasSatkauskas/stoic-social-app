@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { challengeById, challengeForDate, swapForDate } from '../features/today/challenges';
+import { withoutDemoDays } from '../features/today/demo';
 import { bumpStreak } from '../features/today/streak';
 import { treeFromData } from '../features/tree/growth';
 import { addDays, dateKey } from './dates';
@@ -35,6 +36,7 @@ interface Store {
   addExtra(branch: number, root: number): Promise<void>;
   /** Demo only: fill the five most recent empty past days with completions. */
   devFillHistory(): Promise<void>;
+  removeDemoDays(): Promise<void>;
   replaceData(data: AppData): Promise<void>;
 }
 
@@ -159,10 +161,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             swapped: false,
             done: { level: levels[(i * 7) % 3], indoor: false, at: Date.now() },
             pen: i % 4 === 0 ? 'skipped' : 'wrote',
+            demo: true,
           };
           added++;
         }
         await persist({ ...cur, days }, true);
+      },
+      async removeDemoDays() {
+        await persist(withoutDemoDays(dataRef.current));
       },
       async replaceData(next) {
         await persist(next, true);

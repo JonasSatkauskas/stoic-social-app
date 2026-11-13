@@ -3,6 +3,7 @@ import { addDays } from '../../lib/dates';
 import { canPromptInstall, isIOS, isStandalone, onInstallChange, promptInstall } from '../../lib/install';
 import { useStore } from '../../lib/store';
 import { challengeForDate } from '../today/challenges';
+import { countDemoDays } from '../today/demo';
 import { exportBackup, importNotes, mergeApp, readBackup } from './backup';
 
 type Panel = null | 'export' | 'import' | 'name';
@@ -30,7 +31,8 @@ function PenSheet({ from }: { from: string }) {
 }
 
 export default function SettingsScreen() {
-  const { data, today, replaceData, setName, go } = useStore();
+  const { data, today, replaceData, setName, go, removeDemoDays } = useStore();
+  const demoDays = countDemoDays(data);
   const [panel, setPanel] = useState<Panel>(null);
   const [pass1, setPass1] = useState('');
   const [pass2, setPass2] = useState('');
@@ -111,6 +113,19 @@ export default function SettingsScreen() {
           ) : (
             <p className="muted">Use your browser menu and choose Install app or Add to Home Screen.</p>
           )}
+          <hr className="rule" />
+        </>
+      )}
+
+      {demoDays > 0 && (
+        <>
+          <h2>Demo days</h2>
+          <p className="muted">
+            {demoDays === 1 ? 'One day was' : `${demoDays} days were`} added by the demo shortcut. Remove them to see only your own growth.
+          </p>
+          <button className="btn quiet" onClick={() => void removeDemoDays()}>
+            Remove demo days
+          </button>
           <hr className="rule" />
         </>
       )}

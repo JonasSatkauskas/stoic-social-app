@@ -4,6 +4,7 @@ import type { Level } from '../../lib/types';
 import { PenMoment } from '../pen/PenMoment';
 import { Tree } from '../tree/Tree';
 import { LEVEL_LABEL } from './challenges';
+import { demoModeEnabled } from './demo';
 import { currentStreak, isResting } from './streak';
 
 const LEVELS: Level[] = ['easy', 'medium', 'brave'];
@@ -41,7 +42,7 @@ export function TodayScreen() {
 
   return (
     <section className="screen" aria-labelledby="today-title">
-      <button className="dev-button" aria-hidden="true" tabIndex={-1} onClick={devTap} />
+      {demoModeEnabled() && <button className="dev-button" aria-hidden="true" tabIndex={-1} onClick={devTap} />}
       <Tree tree={tree} growTick={growTick} className="today-tree" />
 
       {done ? (

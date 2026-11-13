@@ -18,6 +18,8 @@ export interface DayEntry {
   swapped: boolean;
   done?: { level: Level; indoor: boolean; at: number };
   pen?: 'wrote' | 'skipped';
+  /** Added by the demo shortcut, not by the user. */
+  demo?: boolean;
 }
 
 /** What friends may see about a completion: date, challenge id, level. */

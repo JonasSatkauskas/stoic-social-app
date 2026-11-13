@@ -44,7 +44,7 @@ Add a SPA rewrite if the host needs one (all routes → `/index.html`); the app 
 
 ## Demo helpers
 
-- Tap the invisible square in the top-left of Today five times quickly: adds five past days of challenges and writing, so the tree, visitors and trunk rings fill in.
+- Open the app with `?demo` at the end of the address (e.g. `https://.../?demo`). Then tap the invisible square in the top-left of Today five times quickly: adds five past days of challenges and writing, so the tree, visitors and trunk rings fill in. Settings → Remove demo days takes them out again.
 - Crisis path test: in Talk, type "I do not want to live anymore". The help screen appears and the flow ends.
 
 ## Privacy model
