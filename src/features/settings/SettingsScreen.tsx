@@ -31,7 +31,9 @@ function PenSheet({ from }: { from: string }) {
 }
 
 export default function SettingsScreen() {
-  const { data, today, replaceData, setName, go, removeDemoDays } = useStore();
+  const { data, today, replaceData, setName, go, removeDemoDays, resetTree } = useStore();
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
   const demoDays = countDemoDays(data);
   const [panel, setPanel] = useState<Panel>(null);
   const [pass1, setPass1] = useState('');
@@ -227,6 +229,36 @@ export default function SettingsScreen() {
         </p>
       )}
       <p className="small muted">Friends see your name, your tree, and which challenges you did. Never your notes, your talks or your writing.</p>
+
+      <hr className="rule" />
+
+      <h2>Start my tree again</h2>
+      <p className="muted">Clears your days, your tree and your streak on this phone. Notes, friends and your name stay.</p>
+      {resetDone ? (
+        <p className="center small" role="status">
+          Your tree is a seed again.
+        </p>
+      ) : confirmReset ? (
+        <div className="stones" role="group" aria-label="Start the tree again?">
+          <button
+            className="stone"
+            onClick={async () => {
+              await resetTree();
+              setConfirmReset(false);
+              setResetDone(true);
+            }}
+          >
+            Start again
+          </button>
+          <button className="stone" onClick={() => setConfirmReset(false)}>
+            Keep it
+          </button>
+        </div>
+      ) : (
+        <button className="btn quiet" onClick={() => setConfirmReset(true)}>
+          Start my tree again
+        </button>
+      )}
 
       <hr className="rule" />
 

@@ -37,6 +37,8 @@ interface Store {
   /** Demo only: fill the five most recent empty past days with completions. */
   devFillHistory(): Promise<void>;
   removeDemoDays(): Promise<void>;
+  /** Clears the day log, growth and streak. Keeps notes, friends and name. */
+  resetTree(): Promise<void>;
   replaceData(data: AppData): Promise<void>;
 }
 
@@ -169,6 +171,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       },
       async removeDemoDays() {
         await persist(withoutDemoDays(dataRef.current));
+      },
+      async resetTree() {
+        const cur = dataRef.current;
+        await persist({ ...cur, days: {}, extra: { branch: 0, root: 0 } });
+        const s = { count: 0, lastDate: null };
+        setStreak(s);
+        await saveStreak(s);
       },
       async replaceData(next) {
         await persist(next, true);
