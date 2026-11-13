@@ -2,10 +2,10 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { challengeById, challengeForDate, swapForDate } from '../features/today/challenges';
 import { withoutDemoDays } from '../features/today/demo';
 import { bumpStreak } from '../features/today/streak';
-import { treeFromData } from '../features/tree/growth';
+import { cairnFromData } from '../features/cairn/growth';
 import { addDays, dateKey } from './dates';
 import { loadSecure, loadStreak, requestPersistence, saveSecure, saveStreak, type Streak } from './db';
-import type { AppData, Challenge, DayEntry, Level, TreeState } from './types';
+import type { AppData, CairnState, Challenge, DayEntry, Level } from './types';
 
 export type Tab = 'today' | 'talk' | 'grove' | 'notes' | 'settings';
 
@@ -20,10 +20,10 @@ interface Store {
   today: string;
   data: AppData;
   streak: Streak;
-  tree: TreeState;
+  cairn: CairnState;
   todayEntry: DayEntry;
   challenge: Challenge;
-  /** Increments whenever the tree grows, so the tree can animate. */
+  /** Increments whenever the cairn grows, so it can animate. */
   growTick: number;
   tab: Tab;
   /** Text handed to the Notes screen (a pen prompt, or a Talk reflection). */
@@ -33,25 +33,31 @@ interface Store {
   complete(level: Level, indoor: boolean): Promise<void>;
   pen(result: 'wrote' | 'skipped'): Promise<void>;
   setName(name: string): Promise<void>;
-  addExtra(branch: number, root: number): Promise<void>;
+  addExtra(stones: number, marks: number): Promise<void>;
   /** Demo only: fill the five most recent empty past days with completions. */
   devFillHistory(): Promise<void>;
   removeDemoDays(): Promise<void>;
   /** Clears the day log, growth and streak. Keeps notes, friends and name. */
-  resetTree(): Promise<void>;
+  resetCairn(): Promise<void>;
   replaceData(data: AppData): Promise<void>;
 }
 
 const emptyData = (): AppData => ({
   days: {},
-  extra: { branch: 0, root: 0 },
+  extra: { stones: 0, marks: 0 },
   profile: { name: null },
   createdAt: Date.now(),
 });
 
 const Ctx = createContext<Store | null>(null);
 
-/** Listeners that want to know about progress (the Grove sync). Set in grove/sync.ts. */
+/** Older saves used tree points (branch, root). */
+function migrate(d: AppData): AppData {
+  const e = (d.extra ?? {}) as Partial<AppData['extra']> & { branch?: number; root?: number };
+  return { ...d, extra: { stones: e.stones ?? e.branch ?? 0, marks: e.marks ?? e.root ?? 0 } };
+}
+
+/** Listeners that want to know about progress (the Trail sync). Set in grove/sync.ts. */
 type ProgressListener = (data: AppData) => void;
 const progressListeners = new Set<ProgressListener>();
 export function onProgress(fn: ProgressListener): () => void {
@@ -73,7 +79,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     (async () => {
       const [stored, s] = await Promise.all([loadSecure<AppData>('app'), loadStreak()]);
-      if (stored) setData(stored);
+      if (stored) setData(migrate(stored));
       setStreak(s);
       setReady(true);
     })().catch(() => setReady(true));
@@ -118,7 +124,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       today,
       data,
       streak,
-      tree: treeFromData(data),
+      cairn: cairnFromData(data),
       todayEntry,
       challenge,
       growTick,
@@ -146,9 +152,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         const cur = dataRef.current;
         await persist({ ...cur, profile: { ...cur.profile, name: name.trim().slice(0, 24) } });
       },
-      async addExtra(branch, root) {
+      async addExtra(stones, marks) {
         const cur = dataRef.current;
-        await persist({ ...cur, extra: { branch: cur.extra.branch + branch, root: cur.extra.root + root } }, true);
+        await persist({ ...cur, extra: { stones: cur.extra.stones + stones, marks: cur.extra.marks + marks } }, true);
       },
       async devFillHistory() {
         const cur = dataRef.current;
@@ -172,9 +178,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       async removeDemoDays() {
         await persist(withoutDemoDays(dataRef.current));
       },
-      async resetTree() {
+      async resetCairn() {
         const cur = dataRef.current;
-        await persist({ ...cur, days: {}, extra: { branch: 0, root: 0 } });
+        await persist({ ...cur, days: {}, extra: { stones: 0, marks: 0 } });
         const s = { count: 0, lastDate: null };
         setStreak(s);
         await saveStreak(s);

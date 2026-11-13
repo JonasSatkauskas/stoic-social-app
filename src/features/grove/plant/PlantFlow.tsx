@@ -70,14 +70,13 @@ function Scanner({ active, onResult }: { active: boolean; onResult: (text: strin
   );
 }
 
-function PlantingAnimation() {
+function PlacingAnimation() {
   return (
-    <svg className="planting" viewBox="0 0 200 160" aria-hidden="true">
-      <line className="soil" x1="20" y1="120" x2="180" y2="120" />
-      <ellipse className="seed-drop" cx="100" cy="116" rx="6" ry="4" />
-      <path className="sapling" pathLength={1} d="M100 120 C 98 100, 102 86, 100 66" />
-      <path className="sapling-leaf" d="M100 80 q -16 -10 -24 2 q 12 6 24 -2" />
-      <path className="sapling-leaf" d="M100 72 q 16 -12 24 -2 q -12 8 -24 2" />
+    <svg className="placing" viewBox="0 0 200 160" aria-hidden="true">
+      <line className="ground" x1="30" y1="128" x2="170" y2="128" />
+      <path className="stone tone-1" d="M62 128 q -4 -22 38 -24 q 42 2 38 24 z" />
+      <path className="stone tone-2 drop" d="M76 104 q -2 -18 24 -19 q 26 1 24 19 z" />
+      <path className="stone tone-0 drop late" d="M88 85 q -1 -13 12 -14 q 13 1 12 14 z" />
     </svg>
   );
 }
@@ -126,7 +125,7 @@ export function PlantFlow({ onDone }: { onDone: () => void }) {
     return (
       <section className="screen" aria-labelledby="name-title">
         <h1 id="name-title">What should friends call you?</h1>
-        <p className="muted">Only people you plant a tree with will see it.</p>
+        <p className="muted">Only people you meet and scan in person will see it.</p>
         <label htmlFor="display-name" className="visually-hidden">
           Your name
         </label>
@@ -194,12 +193,12 @@ export function PlantFlow({ onDone }: { onDone: () => void }) {
   if (step.name === 'planted') {
     return (
       <section className="screen center" aria-labelledby="planted-title">
-        <PlantingAnimation />
-        <h1 id="planted-title">{step.watered ? 'Watered. You met again today.' : 'Planted. You met in person today.'}</h1>
-        <p className="muted">{step.friendName} is in your grove now.</p>
+        <PlacingAnimation />
+        <h1 id="planted-title">{step.watered ? 'Another stone. You met again today.' : 'Placed. You met in person today.'}</h1>
+        <p className="muted">{step.friendName} is on your trail now.</p>
         <div className="space" />
         <button className="btn" onClick={onDone}>
-          Back to the grove
+          Back to the trail
         </button>
       </section>
     );
@@ -208,7 +207,7 @@ export function PlantFlow({ onDone }: { onDone: () => void }) {
   if (step.name === 'mismatch') {
     return (
       <section className="screen" aria-labelledby="mismatch-title">
-        <h1 id="mismatch-title">Nothing was planted.</h1>
+        <h1 id="mismatch-title">No stone was placed.</h1>
         <p>The words did not match, so one of the codes was not the one in front of you. Try again, face to face.</p>
         <div className="space" />
         <button
@@ -223,7 +222,7 @@ export function PlantFlow({ onDone }: { onDone: () => void }) {
         </button>
         <div className="links">
           <button className="link" onClick={onDone}>
-            Back to the grove
+            Back to the trail
           </button>
         </div>
       </section>

@@ -4,7 +4,7 @@ import { makePayload, parsePayload } from './payload';
 
 const shared = {
   name: 'Ruta',
-  tree: { branch: 5, root: 2, visitors: { outside: 1 } },
+  cairn: { stones: 5, marks: 2, visitors: { outside: 1 } },
   completions: [
     { d: '2020-01-01', id: 'old', l: 'easy' as const },
     { d: new Date().toISOString().slice(0, 10), id: 'walk-no-phone', l: 'brave' as const },

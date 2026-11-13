@@ -3,7 +3,7 @@ import { addDays } from '../../lib/dates';
 import { relayEnabled } from '../../lib/relay';
 import { useStore } from '../../lib/store';
 import { challengeById, LEVEL_LABEL } from '../today/challenges';
-import { Tree } from '../tree/Tree';
+import { Cairn, CAIRN_RATIO } from '../cairn/Cairn';
 import { daysSinceMet, doneToday, letGo, listFriends, metText, saveFriend, type Friend } from './friends';
 import { PlantFlow } from './plant/PlantFlow';
 import { pullUpdates, sendPebble } from './sync';
@@ -14,8 +14,7 @@ type View = { name: 'scene' } | { name: 'trunk'; fp: string } | { name: 'plant' 
 const SLOT = 128;
 const GROUND = 196;
 const SCENE_H = 256;
-const TREE_W = 150;
-const TREE_RATIO = 226 / 300;
+const CAIRN_W = 150;
 
 function seedOf(fp: string) {
   return parseInt(fp.slice(0, 8), 16) || 1;
@@ -28,7 +27,7 @@ function depthOf(days: number) {
 }
 
 export default function GroveScreen() {
-  const { tree, today } = useStore();
+  const { cairn, today } = useStore();
   const [friends, setFriends] = useState<Friend[] | null>(null);
   const [view, setView] = useState<View>({ name: 'scene' });
   const [menuFor, setMenuFor] = useState<Friend | null>(null);
@@ -136,7 +135,7 @@ export default function GroveScreen() {
   return (
     <section className="screen" aria-labelledby="grove-title">
       <h1 id="grove-title" className="visually-hidden">
-        The Grove
+        The Trail
       </h1>
 
       <div className="grove-scroll" ref={scroller} aria-hidden="true">
@@ -152,15 +151,19 @@ export default function GroveScreen() {
         >
           <path className="far-hill" d={`M0 ${GROUND - 70} Q ${width * 0.25} ${GROUND - 105} ${width * 0.5} ${GROUND - 78} T ${width} ${GROUND - 82}`} />
           <path className="hill" d={`M0 ${GROUND + 4} Q ${width * 0.3} ${GROUND - 12} ${width * 0.55} ${GROUND + 2} T ${width} ${GROUND} V ${SCENE_H} H 0 Z`} />
+          <path
+            className="trail-path"
+            d={`M0 ${GROUND + 22} C ${width * 0.2} ${GROUND + 8}, ${width * 0.35} ${GROUND + 30}, ${width * 0.5} ${GROUND + 18} S ${width * 0.8} ${GROUND + 6}, ${width} ${GROUND + 20}`}
+          />
 
           {slots.map((s, i) => {
             const x = xOf(i);
             if (s.kind === 'me') {
-              const w = TREE_W * myStageScale;
-              const h = w * TREE_RATIO;
+              const w = CAIRN_W * myStageScale;
+              const h = w * CAIRN_RATIO;
               return (
                 <g key="me">
-                  <Tree tree={tree} seed={7} compact box={{ x: x - w / 2, y: GROUND - h + 6, width: w, height: h }} label="Your tree" />
+                  <Cairn cairn={cairn} seed={7} compact box={{ x: x - w / 2, y: GROUND - h + 6, width: w, height: h }} label="Your cairn" />
                   {pebblesForMe.map((_, k) => (
                     <ellipse key={k} className="pebble" cx={x - 18 + k * 7} cy={GROUND + 10 + (k % 2) * 3} rx={4.5} ry={3} />
                   ))}
@@ -175,9 +178,9 @@ export default function GroveScreen() {
                 <g key="plot" className="plot" onClick={() => setView({ name: 'plant' })}>
                   <rect x={x - 50} y={GROUND - 80} width={100} height={130} fill="transparent" />
                   <ellipse className="plot-soil" cx={x} cy={GROUND + 4} rx={30} ry={7} />
-                  <path d={`M${x} ${GROUND - 2} v-12 M${x - 6} ${GROUND - 8} h12`} stroke="var(--stone)" strokeWidth={1.2} strokeLinecap="round" />
+                  <path d={`M${x - 11} ${GROUND - 1} q 1 -9 11 -9 q 10 0 11 9 z`} className="plot-stone" />
                   <text className="name" x={x} y={GROUND + 32}>
-                    Plant together
+                    Meet someone
                   </text>
                 </g>
               );
@@ -185,8 +188,8 @@ export default function GroveScreen() {
             const f = s.f;
             const days = daysSinceMet(f, today);
             const { scale, lift, mist } = depthOf(days);
-            const w = TREE_W * scale;
-            const h = w * TREE_RATIO;
+            const w = CAIRN_W * scale;
+            const h = w * CAIRN_RATIO;
             const base = GROUND - lift;
             const lit = !!doneToday(f, today);
             return (
@@ -200,7 +203,7 @@ export default function GroveScreen() {
                 onContextMenu={(e) => e.preventDefault()}
               >
                 <rect x={x - w / 2} y={base - h} width={w} height={h + 40} fill="transparent" />
-                <Tree tree={f.tree} seed={seedOf(f.fp)} compact box={{ x: x - w / 2, y: base - h + 6, width: w, height: h }} label={f.name} />
+                <Cairn cairn={f.cairn} seed={seedOf(f.fp)} compact box={{ x: x - w / 2, y: base - h + 6, width: w, height: h }} label={f.name} />
                 {lit && (
                   <g>
                     <circle className="lantern-glow" cx={x + 26 * scale} cy={base - 4} r={14 * scale} />
@@ -223,7 +226,7 @@ export default function GroveScreen() {
           {confirmLetGo ? (
             <>
               <p className="serif" style={{ fontSize: '1.15rem' }}>
-                Let {menuFor.name}'s tree go?
+                Let {menuFor.name}'s cairn go?
               </p>
               <p className="small muted">This removes them and their keys from this phone. They keep what they already received.</p>
               <div className="stones">
@@ -252,7 +255,7 @@ export default function GroveScreen() {
               </button>
               <div className="links">
                 <button className="link" onClick={() => setConfirmLetGo(true)}>
-                  Let this tree go
+                  Let this cairn go
                 </button>
                 <button className="link" onClick={() => setMenuFor(null)}>
                   Close
@@ -266,20 +269,20 @@ export default function GroveScreen() {
       {friends && friends.length === 0 ? (
         <div className="center">
           <p className="serif" style={{ fontSize: '1.3rem' }}>
-            Your grove is quiet.
+            Your trail is quiet.
           </p>
-          <p className="muted">Friends are planted in person: you scan each other's phones, face to face.</p>
+          <p className="muted">Friends are added only in person: you scan each other's phones, face to face.</p>
         </div>
       ) : (
-        <p className="center muted small">Tap a tree to visit. Hold to leave a pebble. A lantern means they did today's challenge.</p>
+        <p className="center muted small">Tap a cairn to visit. Hold to leave a pebble. A lantern means they did today's challenge.</p>
       )}
 
       {pebblesForMe.length > 0 && (
-        <p className="center small serif">Someone left a pebble by your tree. They see you.</p>
+        <p className="center small serif">Someone left a pebble by your cairn. They see you.</p>
       )}
 
       <button className="btn" onClick={() => setView({ name: 'plant' })}>
-        Plant together
+        Place a stone together
       </button>
 
       {!relayEnabled && (friends?.length ?? 0) > 0 && (
@@ -290,7 +293,7 @@ export default function GroveScreen() {
 
       {/* Plain version for screen readers */}
       <div className="visually-hidden">
-        <h2>Friends in your grove</h2>
+        <h2>Friends on your trail</h2>
         <ul>
           {sorted.map((f) => {
             const done = doneToday(f, today);

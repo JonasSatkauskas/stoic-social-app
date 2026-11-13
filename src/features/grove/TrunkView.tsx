@@ -3,7 +3,7 @@ import { addDays, dateKey, weekStart } from '../../lib/dates';
 import { useStore } from '../../lib/store';
 import type { Category, Completion } from '../../lib/types';
 import { challengeById, LEVEL_LABEL } from '../today/challenges';
-import { daysSinceMet, doneToday, metText, rootWords, type Friend } from './friends';
+import { daysSinceMet, doneToday, metText, markWords, type Friend } from './friends';
 
 export const CATEGORY_COLOR: Record<Category, string> = {
   outside: '#6b7d3c',
@@ -60,7 +60,10 @@ export function TrunkView({ friend, onBack, onPebble }: { friend: Friend; onBack
       <h1 id="trunk-title" className="center">
         {friend.name}
       </h1>
-      <svg viewBox="0 0 360 360" role="img" aria-label={`Trunk of ${friend.name}. Each ring is a week, each segment a day.`}>
+      <p className="center muted small" style={{ marginTop: '-0.25rem' }}>
+        Seen from above: each ring a week, each stone a day.
+      </p>
+      <svg viewBox="0 0 360 360" role="img" aria-label={`${friend.name}'s cairn seen from above. Each ring is a week, each stone a day.`}>
         {Array.from({ length: WEEKS + 1 }, (_, w) => (
           <circle key={w} className="ring" cx={C} cy={C} r={R0 + w * RING} />
         ))}
@@ -116,18 +119,18 @@ export function TrunkView({ friend, onBack, onPebble }: { friend: Friend; onBack
         ))}
       </ul>
 
-      <p className="center serif">{rootWords(friend.tree.root)}</p>
+      <p className="center serif">{markWords(friend.cairn.marks)}</p>
       <p className="center" style={{ marginBottom: 0 }}>
         Last met in person: {metText(met)}.
       </p>
-      {met > 0 && <p className="center muted">Meet again to water this friendship.</p>}
+      {met > 0 && <p className="center muted">Meet again to add a stone to this friendship.</p>}
       <div className="space" />
       <button className="btn quiet" disabled={pebbleToday} onClick={onPebble}>
         {pebbleToday ? 'You left a pebble today' : 'Leave a pebble'}
       </button>
       <div className="links">
         <button className="link" onClick={onBack}>
-          Back to the grove
+          Back to the trail
         </button>
       </div>
     </section>

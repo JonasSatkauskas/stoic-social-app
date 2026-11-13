@@ -29,15 +29,16 @@ export interface Completion {
   l: Level;
 }
 
-export interface TreeState {
-  branch: number;
-  root: number;
+/** Stones come from challenges, marks (inscriptions) from writing. */
+export interface CairnState {
+  stones: number;
+  marks: number;
   visitors: Partial<Record<Category, number>>;
 }
 
 export interface AppData {
   days: Record<string, DayEntry>;
-  extra: { branch: number; root: number };
+  extra: { stones: number; marks: number };
   profile: { name: string | null };
   createdAt: number;
 }

@@ -33,8 +33,8 @@ export function mergeApp(current: AppData, incoming: AppData): AppData {
   return {
     days,
     extra: {
-      branch: Math.max(current.extra.branch, incoming.extra.branch),
-      root: Math.max(current.extra.root, incoming.extra.root),
+      stones: Math.max(current.extra?.stones ?? 0, incoming.extra?.stones ?? 0),
+      marks: Math.max(current.extra?.marks ?? 0, incoming.extra?.marks ?? 0),
     },
     profile: { name: current.profile.name ?? incoming.profile.name },
     createdAt: Math.min(current.createdAt, incoming.createdAt),

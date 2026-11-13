@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { addDays, dayNumber, weekStart } from '../../lib/dates';
 import type { AppData } from '../../lib/types';
-import { stageFor, treeFromData, STAGES } from '../tree/growth';
+import { cairnFromData, normalizeCairn, stageFor, STAGES } from '../cairn/growth';
 import { CHALLENGES, challengeForDate, swapForDate } from './challenges';
 import { bumpStreak, currentStreak, isResting } from './streak';
 
@@ -50,7 +50,7 @@ describe('streak', () => {
     expect(s.count).toBe(2);
     expect(currentStreak(s, '2026-11-12')).toBe(2);
   });
-  it('starts over quietly after a gap and marks the tree resting', () => {
+  it('starts over quietly after a gap and marks the cairn as standing quietly', () => {
     const s = { count: 5, lastDate: '2026-11-08' };
     expect(currentStreak(s, '2026-11-12')).toBe(0);
     expect(isResting(s, '2026-11-12')).toBe(true);
@@ -58,9 +58,9 @@ describe('streak', () => {
   });
 });
 
-describe('tree growth', () => {
-  const base: AppData = { days: {}, extra: { branch: 0, root: 0 }, profile: { name: null }, createdAt: 0 };
-  it('branches from challenges, roots from writing', () => {
+describe('cairn growth', () => {
+  const base: AppData = { days: {}, extra: { stones: 0, marks: 0 }, profile: { name: null }, createdAt: 0 };
+  it('stones from challenges, marks from writing', () => {
     const data: AppData = {
       ...base,
       days: {
@@ -68,10 +68,13 @@ describe('tree growth', () => {
         '2026-11-11': { challengeId: 'ask-a-question', swapped: false, done: { level: 'easy', indoor: false, at: 0 }, pen: 'skipped' },
       },
     };
-    const t = treeFromData(data);
-    expect(t.branch).toBe(4);
-    expect(t.root).toBe(1);
+    const t = cairnFromData(data);
+    expect(t.stones).toBe(4);
+    expect(t.marks).toBe(1);
     expect(t.visitors).toEqual({ outside: 1, people: 1 });
+  });
+  it('reads the older tree format', () => {
+    expect(normalizeCairn({ branch: 5, root: 2, visitors: { body: 1 } })).toEqual({ stones: 5, marks: 2, visitors: { body: 1 } });
   });
   it('has 8 stages and never goes backwards', () => {
     expect(STAGES).toHaveLength(8);

@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
+import { weekStart } from '../../lib/dates';
 import { useStore } from '../../lib/store';
 import type { Level } from '../../lib/types';
 import { PenMoment } from '../pen/PenMoment';
-import { Tree } from '../tree/Tree';
+import { Cairn } from '../cairn/Cairn';
 import { LEVEL_LABEL } from './challenges';
 import { demoModeEnabled } from './demo';
 import { currentStreak, isResting } from './streak';
@@ -18,7 +19,7 @@ const CATEGORY_LABEL = {
 } as const;
 
 export function TodayScreen() {
-  const { todayEntry, challenge, tree, growTick, streak, today, complete, swap, devFillHistory } = useStore();
+  const { todayEntry, challenge, cairn, growTick, streak, today, data, complete, swap, devFillHistory } = useStore();
   const [level, setLevel] = useState<Level>('easy');
   const [indoor, setIndoor] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -29,6 +30,11 @@ export function TodayScreen() {
 
   const days = currentStreak(streak, today);
   const resting = isResting(streak, today);
+  const weekStartKey = weekStart(today);
+  const thisWeek = Object.entries(data.days)
+    .filter(([d, e]) => d >= weekStartKey && e.done)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, e]) => e.done!.level);
 
   // Hidden demo control: tap the top-left corner five times quickly to add growth.
   const devTap = () => {
@@ -43,19 +49,19 @@ export function TodayScreen() {
   return (
     <section className="screen" aria-labelledby="today-title">
       {demoModeEnabled() && <button className="dev-button" aria-hidden="true" tabIndex={-1} onClick={devTap} />}
-      <Tree tree={tree} growTick={growTick} className="today-tree" />
+      <Cairn cairn={cairn} growTick={growTick} recent={thisWeek} className="today-cairn" />
 
       {done ? (
         <div className="done-message">
           <h1 id="today-title">Done. That was yours to do, and you did it.</h1>
-          <p className="muted">{todayEntry.pen === 'wrote' ? 'Your roots grew from what you wrote.' : 'Your branches grew today.'}</p>
+          <p className="muted">{todayEntry.pen === 'wrote' ? 'A stone placed, and what you wrote carved into it.' : 'A stone placed today.'}</p>
           <div className="space" />
           <p className="serif">Done for today. See you tomorrow.</p>
         </div>
       ) : (
         <>
           {resting ? (
-            <p className="resting">Your tree is resting. Today is enough.</p>
+            <p className="resting">Your cairn stands. Today is enough.</p>
           ) : days > 1 ? (
             <p className="resting">{days} days in a row.</p>
           ) : null}

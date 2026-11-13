@@ -1,19 +1,19 @@
 import { lazy, Suspense } from 'react';
-import { GroveIcon, NotesIcon, SettingsIcon, TalkIcon, TodayIcon } from './components/Icons';
+import { TrailIcon, NotesIcon, SettingsIcon, TalkIcon, TodayIcon } from './components/Icons';
 import { UpdatePrompt } from './components/UpdatePrompt';
 import { NotesScreen } from './features/notes/NotesScreen';
 import { TalkScreen } from './features/talk/TalkScreen';
 import { TodayScreen } from './features/today/TodayScreen';
 import { useStore, type Tab } from './lib/store';
 
-// The Grove pulls in QR, camera and relay code; load it only when opened.
+// The Trail pulls in QR, camera and relay code; load it only when opened.
 const GroveScreen = lazy(() => import('./features/grove/GroveScreen'));
 const SettingsScreen = lazy(() => import('./features/settings/SettingsScreen'));
 
 const NAV: { tab: Tab; label: string; Icon: () => React.JSX.Element }[] = [
   { tab: 'today', label: 'Today', Icon: TodayIcon },
   { tab: 'talk', label: 'Talk it out', Icon: TalkIcon },
-  { tab: 'grove', label: 'Grove', Icon: GroveIcon },
+  { tab: 'grove', label: 'Trail', Icon: TrailIcon },
   { tab: 'notes', label: 'Notes', Icon: NotesIcon },
 ];
 

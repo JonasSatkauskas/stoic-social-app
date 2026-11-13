@@ -31,7 +31,7 @@ function PenSheet({ from }: { from: string }) {
 }
 
 export default function SettingsScreen() {
-  const { data, today, replaceData, setName, go, removeDemoDays, resetTree } = useStore();
+  const { data, today, replaceData, setName, go, removeDemoDays, resetCairn } = useStore();
   const [confirmReset, setConfirmReset] = useState(false);
   const [resetDone, setResetDone] = useState(false);
   const demoDays = countDemoDays(data);
@@ -144,8 +144,8 @@ export default function SettingsScreen() {
       {/* Backup */}
       <h2>Backup</h2>
       <p className="muted">
-        Your days, tree and notes, locked with a passphrase you choose. If you lose the passphrase, the backup cannot be opened by
-        anyone, including you. Friends are not in the backup: they live in this phone's keys, so you plant them again in person.
+        Your days, cairn and notes, locked with a passphrase you choose. If you lose the passphrase, the backup cannot be opened by
+        anyone, including you. Friends are not in the backup: they live in this phone's keys, so you meet them again in person.
       </p>
       {panel === 'export' ? (
         <div>
@@ -201,7 +201,7 @@ export default function SettingsScreen() {
       <hr className="rule" />
 
       {/* Name */}
-      <h2>Your name in the grove</h2>
+      <h2>Your name on the trail</h2>
       {panel === 'name' ? (
         <div>
           <label htmlFor="nm" className="visually-hidden">
@@ -228,22 +228,22 @@ export default function SettingsScreen() {
           </button>
         </p>
       )}
-      <p className="small muted">Friends see your name, your tree, and which challenges you did. Never your notes, your talks or your writing.</p>
+      <p className="small muted">Friends see your name, your cairn, and which challenges you did. Never your notes, your talks or your writing.</p>
 
       <hr className="rule" />
 
-      <h2>Start my tree again</h2>
-      <p className="muted">Clears your days, your tree and your streak on this phone. Notes, friends and your name stay.</p>
+      <h2>Start my cairn again</h2>
+      <p className="muted">Clears your days, your cairn and your streak on this phone. Notes, friends and your name stay.</p>
       {resetDone ? (
         <p className="center small" role="status">
-          Your tree is a seed again.
+          Your cairn is a single stone again.
         </p>
       ) : confirmReset ? (
-        <div className="stones" role="group" aria-label="Start the tree again?">
+        <div className="stones" role="group" aria-label="Start the cairn again?">
           <button
             className="stone"
             onClick={async () => {
-              await resetTree();
+              await resetCairn();
               setConfirmReset(false);
               setResetDone(true);
             }}
@@ -256,7 +256,7 @@ export default function SettingsScreen() {
         </div>
       ) : (
         <button className="btn quiet" onClick={() => setConfirmReset(true)}>
-          Start my tree again
+          Start my cairn again
         </button>
       )}
 

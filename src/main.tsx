@@ -15,7 +15,7 @@ createRoot(document.getElementById('root')!).render(
 
 initInstallCapture();
 
-// Grove sync (relay) loads in its own chunk, after the first paint.
+// Trail sync (relay) loads in its own chunk, after the first paint.
 window.setTimeout(() => {
   void import('./features/grove/sync').then((m) => m.startGroveSync());
 }, 1500);

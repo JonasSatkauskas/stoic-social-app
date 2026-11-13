@@ -32,7 +32,7 @@ export function NotesScreen() {
     setNotes((n) => [note, ...(n ?? [])]);
     setText('');
     setWriting(false);
-    // Writing from the pen moment, digitally, still grows roots.
+    // Writing from the pen moment, digitally, still carves into the cairn.
     if (prompt && todayEntry.done && !todayEntry.pen) {
       await pen('wrote');
       go('today');

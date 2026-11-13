@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { AppData } from '../../lib/types';
 import { mergeApp } from './backup';
 
-const base = (days: AppData['days']): AppData => ({ days, extra: { branch: 0, root: 0 }, profile: { name: null }, createdAt: 1 });
+const base = (days: AppData['days']): AppData => ({ days, extra: { stones: 0, marks: 0 }, profile: { name: null }, createdAt: 1 });
 
 describe('mergeApp', () => {
   it('keeps days from both and prefers completed ones', () => {

@@ -12,7 +12,7 @@ describe('demo days', () => {
       '2026-11-11': { challengeId: 'c', swapped: false, done: { level: 'easy', indoor: false, at: at('2026-11-11') }, demo: true },
       '2026-11-10': { challengeId: 'd', swapped: true },
     },
-    extra: { branch: 0, root: 0 },
+    extra: { stones: 0, marks: 0 },
     profile: { name: null },
     createdAt: 0,
   };

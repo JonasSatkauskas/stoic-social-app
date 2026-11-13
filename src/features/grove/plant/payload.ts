@@ -1,7 +1,8 @@
 import { addDays, dateKey } from '../../../lib/dates';
 import { randomBytes, toB64 } from '../../../lib/crypto';
 import { isValidPublicKey } from '../../../lib/friendCrypto';
-import type { Completion, Level, TreeState } from '../../../lib/types';
+import { normalizeCairn } from '../../cairn/growth';
+import type { CairnState, Completion, Level } from '../../../lib/types';
 import type { SharedState } from '../friends';
 
 /** Live QR payload. Refreshes every 20 s, accepted for 60 s. */
@@ -15,9 +16,9 @@ export interface QrPayload {
   r: string; // random nonce
   t: number; // timestamp ms
   s: {
-    b: number; // branch points
-    o: number; // root points
-    x: TreeState['visitors'];
+    b: number; // stones
+    o: number; // marks (writing)
+    x: CairnState['visitors'];
     c: [string, string, Level][]; // last 7 days: date, challenge id, level
   };
 }
@@ -31,9 +32,9 @@ export function makePayload(publicB64: string, shared: SharedState, now = Date.n
     r: toB64(randomBytes(8)),
     t: now,
     s: {
-      b: shared.tree.branch,
-      o: shared.tree.root,
-      x: shared.tree.visitors,
+      b: shared.cairn.stones,
+      o: shared.cairn.marks,
+      x: shared.cairn.visitors,
       c: shared.completions.filter((c) => c.d >= since).map((c) => [c.d, c.id, c.l]),
     },
   };
@@ -48,10 +49,10 @@ export function parsePayload(text: string, myPublicB64: string, now = Date.now()
   try {
     p = JSON.parse(text) as QrPayload;
   } catch {
-    return { ok: false, reason: 'That is not a Grove code.' };
+    return { ok: false, reason: 'That is not a Less Phone code.' };
   }
   if (!p || p.v !== 1 || typeof p.k !== 'string' || typeof p.t !== 'number' || !p.s) {
-    return { ok: false, reason: 'That is not a Grove code.' };
+    return { ok: false, reason: 'That is not a Less Phone code.' };
   }
   if (!isValidPublicKey(p.k)) return { ok: false, reason: 'That code could not be read. Try again.' };
   if (p.k === myPublicB64) return { ok: false, reason: 'That is your own code.' };
@@ -65,11 +66,7 @@ export function parsePayload(text: string, myPublicB64: string, now = Date.now()
     : [];
   const shared: SharedState = {
     name: (typeof p.n === 'string' && p.n.trim() ? p.n : 'A friend').slice(0, 24),
-    tree: {
-      branch: Math.max(0, Number(p.s.b) || 0),
-      root: Math.max(0, Number(p.s.o) || 0),
-      visitors: typeof p.s.x === 'object' && p.s.x ? p.s.x : {},
-    },
+    cairn: normalizeCairn({ stones: p.s.b, marks: p.s.o, visitors: p.s.x }),
     completions,
   };
   return { ok: true, payload: p, shared };

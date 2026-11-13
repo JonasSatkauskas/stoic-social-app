@@ -1,13 +1,13 @@
 import { addDays, dateKey, daysBetween } from '../../lib/dates';
 import { deleteSecure, listSecureIds, loadSecure, saveSecure } from '../../lib/db';
 import { deriveFriendship, fingerprint, getIdentity, type Friendship } from '../../lib/friendCrypto';
-import type { AppData, Completion, TreeState } from '../../lib/types';
-import { completionsFromData, treeFromData } from '../tree/growth';
+import type { AppData, CairnState, Completion } from '../../lib/types';
+import { cairnFromData, completionsFromData, normalizeCairn } from '../cairn/growth';
 
 /** Exactly what a friend may know about you. Nothing else is ever shared. */
 export interface SharedState {
   name: string;
-  tree: TreeState;
+  cairn: CairnState;
   completions: Completion[];
 }
 
@@ -31,7 +31,7 @@ const PREFIX = 'friend:';
 export function sharedStateFrom(data: AppData, days = 60): SharedState {
   return {
     name: data.profile.name ?? 'A friend',
-    tree: treeFromData(data),
+    cairn: cairnFromData(data),
     completions: completionsFromData(data, addDays(dateKey(), -days)),
   };
 }
@@ -39,7 +39,15 @@ export function sharedStateFrom(data: AppData, days = 60): SharedState {
 export async function listFriends(): Promise<Friend[]> {
   const ids = await listSecureIds(PREFIX);
   const all = await Promise.all(ids.map((id) => loadSecure<Friend>(id)));
-  return all.filter((f): f is Friend => !!f);
+  return all.filter((f): f is Friend => !!f).map(migrateFriend);
+}
+
+/** Friends saved before the cairn kept a tree (branch, root). */
+function migrateFriend(f: Friend): Friend {
+  const old = f as Friend & { tree?: unknown };
+  if (f.cairn && !old.tree) return f;
+  const { tree, ...rest } = old;
+  return { ...rest, cairn: normalizeCairn(f.cairn ?? tree) };
 }
 
 export function saveFriend(f: Friend): Promise<void> {
@@ -77,7 +85,7 @@ export async function plantOrWater(pub: string, shared: SharedState): Promise<{ 
     ? {
         ...existing,
         name: shared.name,
-        tree: shared.tree,
+        cairn: shared.cairn,
         completions: mergeCompletions(existing.completions, shared.completions),
         metAt: today,
       }
@@ -109,9 +117,9 @@ export function doneToday(f: Pick<Friend, 'completions'>, today = dateKey()): Co
   return f.completions.find((c) => c.d === today);
 }
 
-export function rootWords(root: number): string {
-  if (root === 0) return 'Roots are just beginning.';
-  if (root < 5) return 'Young roots from writing.';
-  if (root < 15) return 'Steady roots from writing.';
-  return 'Deep roots from writing.';
+export function markWords(marks: number): string {
+  if (marks === 0) return 'No lines carved yet.';
+  if (marks < 5) return 'A few lines carved from writing.';
+  if (marks < 15) return 'Steady lines carved from writing.';
+  return 'Deeply inscribed from writing.';
 }

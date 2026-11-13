@@ -1,11 +1,12 @@
 /**
- * Grove sync. After progress, one encrypted update per friend goes to the
+ * Trail sync. After progress, one encrypted update per friend goes to the
  * relay. Failed posts wait in the outbox (ciphertext only) and retry later.
  */
 import { getDB } from '../../lib/idb';
 import { encryptUpdate, decryptUpdate, getIdentity, fingerprint } from '../../lib/friendCrypto';
 import { fetchUpdates, postUpdate, relayEnabled } from '../../lib/relay';
 import { onProgress } from '../../lib/store';
+import { normalizeCairn } from '../cairn/growth';
 import type { AppData } from '../../lib/types';
 import { friendshipWith, listFriends, mergeCompletions, saveFriend, sharedStateFrom, type Friend, type GroveMessage } from './friends';
 
@@ -93,7 +94,7 @@ export async function pullUpdates(): Promise<Friend[]> {
             next = {
               ...next,
               name: String(body.name).slice(0, 24),
-              tree: body.tree,
+              cairn: normalizeCairn((body as { cairn?: unknown; tree?: unknown }).cairn ?? (body as { tree?: unknown }).tree),
               completions: mergeCompletions(next.completions, body.completions),
             };
           } else if (body.kind === 'pebble' && !next.pebblesFromThem.includes(body.d)) {

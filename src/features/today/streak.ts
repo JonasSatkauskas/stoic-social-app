@@ -14,7 +14,7 @@ export function currentStreak(s: Streak, today: string): number {
   return 0;
 }
 
-/** True when the last completion was before yesterday. Shown as "Your tree is resting." */
+/** True when the last completion was before yesterday. Shown as "Your cairn stands. Today is enough." */
 export function isResting(s: Streak, today: string): boolean {
   return s.lastDate !== null && s.lastDate !== today && s.lastDate !== addDays(today, -1);
 }
