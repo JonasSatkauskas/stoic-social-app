@@ -564,67 +564,8 @@ button {
   margin-bottom: 0;
 }
 
-/* A line to carry */
-.carry {
-  margin: 1.75rem 0 1.5rem;
-  padding: 1.25rem 0 0;
-  border-top: var(--line);
-  text-align: center;
-}
-
-.carry blockquote {
-  margin: 0.25rem 0 0.5rem;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1.12rem;
-  line-height: 1.45;
-  color: var(--ink);
-}
-
-.carry figcaption {
-  font-family: var(--sans);
-  font-style: normal;
-  font-size: 0.78rem;
-  color: var(--stone);
-}
-
-.carry cite {
-  font-style: normal;
-}
-
-.carry-practice {
-  margin: 0.75rem auto 0;
-  max-width: 30ch;
-  font-family: var(--sans);
-  font-style: normal;
-  font-size: 0.95rem;
-  color: var(--ink-soft);
-}
-
-.carry.compact {
-  margin: 0.6rem auto 0;
-  padding-top: 0.7rem;
-  max-width: 34ch;
-}
-
-.carry.compact blockquote {
-  font-size: 1rem;
-  color: var(--ink-soft);
-}
-
-.carry.compact .carry-practice {
-  font-size: 0.88rem;
-  margin-top: 0.5rem;
-}
-
 .challenge {
   text-align: center;
-}
-
-.challenge .why {
-  color: var(--ink-soft);
-  font-family: var(--serif);
-  font-style: italic;
 }
 
 .level-text {
@@ -1245,53 +1186,6 @@ input:focus {
   }
 }
 
-/* Short screens: the Done screen must fit without scrolling. */
-@media (max-height: 760px) {
-  .done-screen {
-    padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
-  }
-  .done-screen .today-cairn.small {
-    max-width: 140px;
-  }
-  .done-screen h1 {
-    font-size: 1.45rem;
-  }
-  .done-screen .carry {
-    margin: 1rem 0 0.75rem;
-    padding-top: 0.9rem;
-  }
-  .done-screen .carry blockquote {
-    font-size: 1rem;
-  }
-  .done-screen .carry-practice {
-    margin-top: 0.5rem;
-  }
-}
-
-@media (max-height: 620px) {
-  .done-screen .today-cairn.small {
-    max-width: 96px;
-  }
-  .done-screen h1 {
-    font-size: 1.25rem;
-  }
-  .done-screen .done-message > .muted,
-  .done-screen .carry .eyebrow {
-    display: none;
-  }
-  .done-screen .carry blockquote {
-    font-size: 0.95rem;
-  }
-  .done-screen .carry-practice {
-    font-size: 0.88rem;
-  }
-  .done-screen .done-message > .serif {
-    margin: 0;
-    font-size: 0.95rem;
-  }
-}
-
-
 /* ---------- Today: everything fits on one screen ---------- */
 
 .today {
@@ -1324,7 +1218,7 @@ input:focus {
 
 .today .level-text {
   min-height: 3.2em;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.75rem;
   animation: fade 0.35s ease-out;
 }
 
@@ -1332,16 +1226,42 @@ input:focus {
   margin: 0.75rem 0;
 }
 
-.today .why {
-  text-align: center;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 0.92rem;
-  color: var(--ink-soft);
+.day-quote {
   margin: 0 0 1rem;
+  text-align: center;
 }
 
+.day-quote blockquote {
+  margin: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.day-quote figcaption {
+  margin-top: 0.2rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+
 @media (max-height: 700px) {
+  .today .today-cairn {
+    height: 17dvh;
+  }
+  .today .stones {
+    margin: 0.5rem 0;
+  }
+  .today .level-text {
+    margin-bottom: 0.5rem;
+  }
+  .day-quote {
+    margin-bottom: 0.6rem;
+  }
   .today h1 {
     font-size: 1.6rem;
   }
@@ -1366,14 +1286,23 @@ input:focus {
 }
 
 .closed .closed-cairn {
-  height: 42dvh;
+  height: 36dvh;
   max-height: 360px;
   width: auto;
   max-width: 100%;
 }
 
-.closed h1 {
-  margin-top: 0.5rem;
+.closed-card {
+  text-align: center;
+  margin: 0.75rem 0 1rem;
+}
+
+.closed-card h1 {
+  margin: 0.1rem 0;
+}
+
+.closed-card .muted {
+  margin: 0;
 }
 
 .stone.tappable {
@@ -1385,100 +1314,6 @@ input:focus {
   stroke-width: 2.4;
 }
 
-.stone-card {
-  min-height: 3.2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.stone-word {
-  font-family: var(--serif);
-  font-size: 1.4rem;
-}
-
-/* ---------- carve one word ---------- */
-
-input.carve-input {
-  font-family: var(--serif);
-  font-size: 1.6rem;
-  text-align: center;
-  max-width: 280px;
-  margin: 1rem auto 0;
-}
-
-.center-hint {
-  justify-content: center;
-}
-
-/* ---------- quote threshold ---------- */
-
-.threshold {
-  max-width: 520px;
-  margin: 0 auto;
-  min-height: 100dvh;
-  padding: calc(env(safe-area-inset-top, 0px) + 32px) 28px calc(env(safe-area-inset-bottom, 0px) + 32px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  text-align: center;
-}
-
-.threshold-hint {
-  font-size: 0.85rem;
-  color: var(--stone);
-  margin: 0;
-}
-
-.threshold-quote {
-  margin: 0;
-  transition: opacity 9s ease-in;
-}
-
-.threshold-quote.fading,
-.threshold-quote.gone {
-  opacity: 0;
-}
-
-.threshold-quote blockquote {
-  margin: 0 0 1.25rem;
-  font-family: var(--serif);
-  font-size: 1.75rem;
-  line-height: 1.35;
-  color: var(--ink);
-}
-
-.threshold-quote figcaption {
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--stone);
-}
-
-.threshold-quote cite {
-  font-style: normal;
-}
-
-.threshold-practice {
-  margin: 1.25rem auto 0;
-  max-width: 30ch;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-}
-
-.threshold-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-@media (max-height: 640px) {
-  .threshold-quote blockquote {
-    font-size: 1.35rem;
-  }
-}
 
 /* ---------- talk ---------- */
 

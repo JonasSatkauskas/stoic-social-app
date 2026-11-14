@@ -74,9 +74,12 @@ export function TalkScreen() {
             {lastQuestion && <p className="muted small" style={{ margin: '0.4rem 0 0' }}>{lastQuestion}</p>}
           </li>
           <li>
-            <div className="eyebrow">2. A challenge</div>
-            <button className="tertiary" style={{ padding: '4px 0', color: 'var(--ink)', fontSize: '1.05rem' }} onClick={leave}>
+            <div className="eyebrow">2. Today's challenge</div>
+            <p className="serif" style={{ fontSize: '1.2rem', margin: '0 0 0.6rem' }}>
               {challenge.title}
+            </p>
+            <button className="btn" onClick={leave}>
+              Go and do it
             </button>
           </li>
           <li>

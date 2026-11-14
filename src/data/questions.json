@@ -22,10 +22,10 @@
         "salary"
       ],
       "questions": [
-        "Which part of this is up to you, and which part is not?",
-        "What is the fact here, and what is the story you are adding to it?",
-        "If you had to write the next small step on a sticky note, what would it say?",
-        "Which \"I have to\" in this could become \"I choose to\" or \"I won't\"?"
+        "What part of this is in your control?",
+        "What actually happened, without your opinion about it?",
+        "What is one small step you can take today?",
+        "Will this matter a year from now?"
       ]
     },
     {
@@ -56,10 +56,10 @@
         "ex"
       ],
       "questions": [
-        "What did they actually do or say, before you decided what it meant?",
-        "What would you say to them if you knew they would listen calmly?",
-        "Which part of this relationship is up to you today?",
-        "What do you want for this person, apart from what you want from them?"
+        "What did they actually say or do?",
+        "What part of this is up to you?",
+        "How do you want to act, whatever they do?",
+        "What would a calm and fair person do next?"
       ]
     },
     {
@@ -82,10 +82,10 @@
         "overthinking"
       ],
       "questions": [
-        "What has actually happened so far, and what has only happened in your head?",
-        "If the thing you fear happened, what would you do first?",
-        "How much of this will matter to you one year from now?",
-        "What part of this can you act on today, and what can only wait?"
+        "Has this happened, or is it only in your head?",
+        "What can you do about it today?",
+        "If the worst happened, what would you do first?",
+        "What is in your control right now?"
       ]
     },
     {
@@ -106,10 +106,10 @@
         "pissed"
       ],
       "questions": [
-        "What judgment are you making about what happened, apart from what happened?",
-        "What would a calm version of you do next?",
-        "Is the other person's behaviour up to you, or only your answer to it?",
-        "If you saw this from far above, how large would it look?"
+        "What exactly made you angry?",
+        "Can you control what they do, or only how you answer?",
+        "How will this look to you tomorrow?",
+        "What would you do if you were calm?"
       ]
     },
     {
@@ -131,10 +131,10 @@
         "numb"
       ],
       "questions": [
-        "What is the smallest thing your body is asking for right now?",
-        "Which of today's \"I have to\" could you put down for one day?",
-        "What did you notice in your body before you started writing this?",
-        "What would rest look like if you chose it instead of falling into it?"
+        "What does your body need right now?",
+        "What can you put down for today?",
+        "What is one thing you can still do well today?",
+        "When did you last rest without a screen?"
       ]
     },
     {
@@ -142,17 +142,17 @@
       "keywords": [],
       "questions": [
         "What part of this is up to you?",
-        "Right now, what do you notice, before you explain it?",
-        "What is the fact here, and what is the story you are adding to it?",
-        "If a friend told you this, what would you ask them?"
+        "What actually happened, in plain facts?",
+        "What would you tell a friend in your place?",
+        "What is one good thing you can do today?"
       ]
     }
   ],
   "followUps": [
-    "What is one small action you could take today that would be yours to take?",
-    "If you wrote this as \"I choose to\", what would the sentence be?",
-    "What would you do differently if you could not fail at it?",
-    "What would you want to remember about this a week from now?"
+    "What is one small thing you will do today?",
+    "What can you let go of?",
+    "What would a wise friend tell you to do?",
+    "What do you want to remember from this?"
   ],
   "quotes": [
     {

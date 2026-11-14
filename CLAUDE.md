@@ -11,13 +11,14 @@ A local-first PWA built around a daily loop: **do it, write it, grow**. One smal
 - **Private data is always encrypted** with src/lib/crypto.ts before it is stored. Never store plain text in IndexedDB, localStorage or sessionStorage.
 - **Never log personal text** (notes, talk messages) to the console.
 - **Only Web Crypto** for cryptography (AES-GCM, PBKDF2, ECDH P-256, HKDF). No custom crypto, no crypto libraries.
+- **Reflect questions are Stoic in substance and plain in words:** short, everyday language, easy to answer in a sentence (what is in your control, fact vs opinion, one small step, view from a year later).
 - **Talk flow limit:** max 2 questions, enforced in the state machine, not in prompts. The close screen has no "continue" button. Every step offers "Answer on paper" as an equal choice to typing.
 - **Safety:** every user message in the Talk flow passes src/lib/safety.ts first. Crisis signs end the flow and show the help screen.
 - **Wording:** "reflection partner", never "therapist", "therapy", "counselor" or "diagnosis". No religious or spiritual framing in the app's own text.
-- **The daily challenge is the core.** Today is the home screen: day line, cairn (about a quarter of the height), then category, title, instruction, level stones, the "why", one Done button. It must fit on one screen at 360×640. After Done and the pen moment, Today closes itself: "Your stone is placed. Closed until tomorrow." Nothing more to scroll.
-- **The quote threshold.** The first open of each day shows one quote, full screen, no navigation. It fades after 60 seconds. "I copied it" (by hand, on paper) adds a mark. No archive, no favourites, no way back: the user's notebook is the only library.
+- **The daily challenge is the core and the first thing the user sees.** Today is the home screen: day line, cairn (about a quarter of the height), category, title, the three level stones (Easy / Medium / Brave), the text for the chosen level, one short quote under the challenge, one Done button. It must fit on one screen at 360×640. Nothing may be shown before the challenge.
+- **After Done and the pen moment, Today closes itself** and shows what was done: "Today: <challenge>. <Level>." plus "Closed until tomorrow." Tapping a stone in the cairn shows the challenge done that day. Nothing more to scroll.
+- **Quotes serve the challenge.** One short verified line under the challenge, matched to its category (a "beginning again" line after a gap). No quote screens, no archive.
 - **The pen moment timer runs only while the phone lies face down** (DeviceOrientation; iPhone asks permission on the tap). Without orientation data it falls back to a normal timer.
-- **Carve one word.** After writing, the user may carve one word on today's stone. Encrypted, local, never shared on the Trail. Tapping a stone shows its word and date.
 - **Pen and paper come first.** After every challenge comes the pen moment (prompt + timer + "I wrote it"). The app never asks the user to type what they wrote on paper and never stores it. Digital notes are a fallback, never the default.
 - **Stones come from challenges, carved lines (inscriptions) come from writing.**
 - **The cairn never falls, crumbles or looks sad.** Missed days only show "Your cairn stands. Today is enough." No guilt mechanics, no punishment, no loss of progress.
@@ -59,7 +60,7 @@ Stoic calm and rational psychology, based on Janette Rainwater's self-therapy me
 - Observation before interpretation (Rainwater's self-observation).
 - Examples: "Done. That was yours to do, and you did it." / "Your cairn stands. Today is enough." / "What part of this is up to you?" / "Placed. You met in person today." / "Meet again to add a stone to this friendship."
 - Pen prompt types to rotate: awareness ("Right now I notice..."), responsibility ("I have to" → "I choose to"), fact vs judgment, control (up to me / not up to me), evening review, unsent letter, view from above.
-- Quotes only from public-domain texts, quoted faithfully with author and work: the Stoics (Marcus Aurelius and Epictetus tr. George Long, Seneca tr. Gummere) and Ralph Waldo Emerson. Every quote in src/data/lines.json and questions.json must pass `python3 tools/verify-quotes.py`, which checks it word for word against the source texts. Each line to carry has one practice sentence in our own voice. Rainwater's methods in our own words, credited, never copied from her books.
+- Quotes only from public-domain texts, quoted faithfully with author and work: the Stoics (Marcus Aurelius and Epictetus tr. George Long, Seneca tr. Gummere) and Ralph Waldo Emerson. Every quote in src/data/lines.json and questions.json must pass `python3 tools/verify-quotes.py`, which checks it word for word against the source texts. Lines shown under a challenge are at most 110 characters. Rainwater's methods in our own words, credited, never copied from her books.
 - No religious or spiritual framing in the app's own voice.
 
 ### Visual

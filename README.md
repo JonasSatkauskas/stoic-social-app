@@ -44,10 +44,10 @@ Add a SPA rewrite if the host needs one (all routes → `/index.html`); the app 
 
 ## Demo flow (90 seconds)
 
-1. Open the app on a fresh day (or with `?demo`, which shows the quote threshold on every load). Read the quote aloud: it fades in 60 seconds, so you copy it by hand.
-2. Today: tap Brave, then "Done, Brave".
-3. Pen moment: choose 2 min and put the phone face down. Pick it up: "Paused. Your page is waiting."
-4. Carve one word. The new stone joins the cairn. "Your stone is placed. Closed until tomorrow."
+1. Open the app: today's challenge, the same for everyone. Tap Brave, read the Brave version aloud, then "Done, Brave".
+2. Pen moment: choose 2 min and put the phone face down. Pick it up: "Paused. Your page is waiting." Tap "I wrote it".
+3. The stone drops onto the cairn. "Today: <challenge>. Brave. Closed until tomorrow." Tap an older stone: it shows the challenge from that day.
+4. Reflect: type a worry (or answer on paper). One or two plain questions, then "Go and do it".
 5. Trail: a friend's lantern is lit. Place a stone together by scanning each other's phones.
 
 ## Demo helpers
@@ -57,7 +57,7 @@ Add a SPA rewrite if the host needs one (all routes → `/index.html`); the app 
 
 ## Quotes
 
-"A line to carry" (Done screen, and after a gap) comes from `src/data/lines.json`. After editing quotes, run `python3 tools/verify-quotes.py`: it downloads the public-domain sources once into `.sources/` and checks every quote word for word, including Marcus Aurelius book numbers.
+The short line under each day's challenge comes from `src/data/lines.json`. After editing quotes, run `python3 tools/verify-quotes.py`: it downloads the public-domain sources once into `.sources/` and checks every quote word for word, including Marcus Aurelius book numbers.
 
 ## Privacy model
 

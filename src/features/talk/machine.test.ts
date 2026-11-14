@@ -64,3 +64,17 @@ describe('talk machine', () => {
     expect(talkReducer(s, { type: 'finish' }).step).toBe('close');
   });
 });
+
+describe('question bank', () => {
+  it('questions are short, plain and calm', async () => {
+    const bank = (await import('../../data/questions.json')).default;
+    const all = [...bank.topics.flatMap((t) => t.questions), ...bank.followUps];
+    for (const q of all) {
+      expect(q.endsWith('?')).toBe(true);
+      expect(q.length).toBeLessThanOrEqual(60);
+      expect(q).not.toMatch(/!/);
+      // plain words: no word longer than 12 letters
+      expect(Math.max(...q.replace(/[^a-zA-Z ]/g, '').split(' ').map((w) => w.length))).toBeLessThanOrEqual(12);
+    }
+  });
+});

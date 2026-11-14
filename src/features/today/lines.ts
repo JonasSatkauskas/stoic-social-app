@@ -2,21 +2,24 @@ import data from '../../data/lines.json';
 import { dayNumber } from '../../lib/dates';
 import type { Category } from '../../lib/types';
 
-/** A line to carry: a verified public-domain quote plus a practice in our own words. */
+/** A verified public-domain quote shown under the day's challenge. */
 export interface Line {
   id: string;
   theme: Category | 'return';
   text: string;
   author: string;
   work: string;
-  practice: string;
 }
 
 export const LINES = data as Line[];
 
+/** Only short lines sit under a challenge, so Today fits on one screen. */
+export const MAX_LINE_LENGTH = 110;
+
 function pick(theme: Line['theme'], key: string): Line {
-  const pool = LINES.filter((l) => l.theme === theme);
-  const list = pool.length ? pool : LINES;
+  const short = LINES.filter((l) => l.text.length <= MAX_LINE_LENGTH);
+  const pool = short.filter((l) => l.theme === theme);
+  const list = pool.length ? pool : short;
   return list[((dayNumber(key) % list.length) + list.length) % list.length];
 }
 

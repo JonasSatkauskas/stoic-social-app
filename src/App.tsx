@@ -3,9 +3,6 @@ import { NotesIcon, ReflectIcon, SettingsIcon, TodayIcon, TrailIcon } from './co
 import { UpdatePrompt } from './components/UpdatePrompt';
 import { NotesScreen } from './features/notes/NotesScreen';
 import { TalkScreen } from './features/talk/TalkScreen';
-import { lineForDay, returnLine } from './features/today/lines';
-import { QuoteThreshold } from './features/today/QuoteThreshold';
-import { isResting } from './features/today/streak';
 import { TodayScreen } from './features/today/TodayScreen';
 import { useStore, type Tab } from './lib/store';
 
@@ -34,26 +31,9 @@ function InsecureNotice() {
 }
 
 export function App() {
-  const { ready, tab, go, thresholdPending, today, streak, challenge, markQuote } = useStore();
+  const { ready, tab, go } = useStore();
   if (!window.isSecureContext || !globalThis.crypto?.subtle) return <InsecureNotice />;
   if (!ready) return <div className="app" aria-busy="true" />;
-
-  if (thresholdPending) {
-    const line = isResting(streak, today) ? returnLine(today) : lineForDay(today, challenge.category);
-    return (
-      <QuoteThreshold
-        line={line}
-        onCopied={() => {
-          go('today');
-          void markQuote('copied');
-        }}
-        onContinue={() => {
-          go('today');
-          void markQuote('seen');
-        }}
-      />
-    );
-  }
 
   return (
     <>

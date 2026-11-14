@@ -1,23 +1,33 @@
 import { useRef, useState } from 'react';
-import { weekStart } from '../../lib/dates';
+import { addDays, weekStart } from '../../lib/dates';
 import { useStore } from '../../lib/store';
-import type { Level } from '../../lib/types';
+import type { Category, Level } from '../../lib/types';
 import { Cairn } from '../cairn/Cairn';
 import { PenMoment } from '../pen/PenMoment';
-import { CarveWord } from './CarveWord';
-import { LEVEL_LABEL } from './challenges';
+import { challengeById, challengeForDate, LEVEL_LABEL } from './challenges';
 import { demoModeEnabled } from './demo';
+import { lineForDay, returnLine } from './lines';
 import { isResting } from './streak';
 
 const LEVELS: Level[] = ['easy', 'medium', 'brave'];
-const CATEGORY_LABEL = {
+
+const CATEGORY_LABEL: Record<Category, string> = {
   outside: 'Outside',
   people: 'People',
   unplug: 'Unplug',
   notice: 'Notice',
   body: 'Body',
   create: 'Create',
-} as const;
+};
+
+const TOMORROW: Record<Category, string> = {
+  outside: 'something outside',
+  people: 'something with people',
+  unplug: 'time away from the screen',
+  notice: 'something to notice',
+  body: 'something for your body',
+  create: 'something to make with your hands',
+};
 
 const dayFmt = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
 const shortFmt = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'short' });
@@ -32,7 +42,6 @@ export function TodayScreen() {
 
   const done = todayEntry.done;
   if (done && !todayEntry.pen) return <PenMoment />;
-  if (done && todayEntry.pen === 'wrote' && todayEntry.word === undefined) return <CarveWord />;
 
   const resting = isResting(streak, today);
   const weekStartKey = weekStart(today);
@@ -40,11 +49,6 @@ export function TodayScreen() {
     .filter(([d, e]) => d >= weekStartKey && e.done)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([, e]) => e.done!.level);
-  // Carved words, most recent first: the top stone holds the newest word.
-  const words = Object.entries(data.days)
-    .filter(([, e]) => e.word)
-    .sort(([a], [b]) => b.localeCompare(a))
-    .map(([d, e]) => ({ d, word: e.word as string }));
 
   // Hidden demo control (only with ?demo): tap the top-left corner five times quickly.
   const devTap = () => {
@@ -55,14 +59,22 @@ export function TodayScreen() {
       void devFillHistory();
     }
   };
-
-  const dayLine = dayFmt.format(new Date(today + 'T12:00'));
-  const selected = stone !== null ? words[stone] : undefined;
+  const devButton = demoModeEnabled() && <button className="dev-button" aria-hidden="true" tabIndex={-1} onClick={devTap} />;
 
   if (done) {
+    // Each stone, from the top, is a day you did a challenge: the newest on top.
+    const doneDays = Object.entries(data.days)
+      .filter(([, e]) => e.done)
+      .sort(([a], [b]) => b.localeCompare(a))
+      .map(([d, e]) => ({ d, id: e.challengeId, l: e.done!.level }));
+    const shown = (stone !== null ? doneDays[stone] : undefined) ?? doneDays[0];
+    const shownTitle = shown ? (challengeById(shown.id)?.title ?? challenge.title) : challenge.title;
+    const isToday = !shown || shown.d === today;
+    const tomorrow = challengeForDate(addDays(today, 1)).category;
+
     return (
       <section className="screen closed" aria-labelledby="today-title">
-        {demoModeEnabled() && <button className="dev-button" aria-hidden="true" tabIndex={-1} onClick={devTap} />}
+        {devButton}
         <Cairn
           cairn={cairn}
           growTick={growTick}
@@ -71,46 +83,30 @@ export function TodayScreen() {
           onStoneTap={(i) => setStone((cur) => (cur === i ? null : i))}
           selectedFromTop={stone}
         />
-        <h1 id="today-title" className="center">
-          Your stone is placed.
-        </h1>
-        <p className="center muted serif">Closed until tomorrow.</p>
-        <div className="stone-card" role="status" aria-live="polite">
-          {stone === null ? null : selected ? (
-            <>
-              <span className="stone-word">{selected.word}</span>
-              <span className="muted small">{shortFmt.format(new Date(selected.d + 'T12:00'))}</span>
-            </>
-          ) : (
-            <span className="muted small">No word on this stone.</span>
-          )}
+        <div className="closed-card" role="status" aria-live="polite">
+          <div className="eyebrow">{isToday ? 'Today' : shortFmt.format(new Date(shown!.d + 'T12:00'))}</div>
+          <h1 id="today-title">{shownTitle}</h1>
+          <p className="muted">{LEVEL_LABEL[shown ? shown.l : done.level]}</p>
         </div>
-        {words.length > 0 && (
-          <ul className="visually-hidden">
-            {words.slice(0, 8).map((w) => (
-              <li key={w.d}>
-                {shortFmt.format(new Date(w.d + 'T12:00'))}: {w.word}
-              </li>
-            ))}
-          </ul>
-        )}
+        {isToday && <p className="center serif">Done. That was yours to do, and you did it.</p>}
+        <p className="center muted small">Closed until tomorrow. Tomorrow: {TOMORROW[tomorrow]}.</p>
+        <p className="center muted small">Tap a stone to see the day it marks.</p>
       </section>
     );
   }
 
+  const line = resting ? returnLine(today) : lineForDay(today, challenge.category);
+
   return (
     <section className="screen today" aria-labelledby="today-title">
-      {demoModeEnabled() && <button className="dev-button" aria-hidden="true" tabIndex={-1} onClick={devTap} />}
-      <p className="day-line">{dayLine}</p>
+      {devButton}
+      <p className="day-line">{dayFmt.format(new Date(today + 'T12:00'))}</p>
       <Cairn cairn={cairn} growTick={growTick} recent={thisWeek} className="today-cairn" />
       {resting && <p className="resting">Your cairn stands. Today is enough.</p>}
 
       <div className="challenge">
         <div className="eyebrow">{CATEGORY_LABEL[challenge.category]}</div>
         <h1 id="today-title">{challenge.title}</h1>
-        <p className="level-text" aria-live="polite" key={indoor ? 'indoor' : level}>
-          {indoor ? challenge.indoor : challenge[level]}
-        </p>
       </div>
 
       {!indoor && (
@@ -123,7 +119,14 @@ export function TodayScreen() {
         </div>
       )}
 
-      <p className="why">{challenge.why}</p>
+      <p className="level-text" aria-live="polite" key={indoor ? 'indoor' : level}>
+        {indoor ? challenge.indoor : challenge[level]}
+      </p>
+
+      <figure className="day-quote">
+        <blockquote>{line.text}</blockquote>
+        <figcaption>{line.author}</figcaption>
+      </figure>
 
       <button
         className="btn"

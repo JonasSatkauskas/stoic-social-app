@@ -1,20 +1,25 @@
 import { describe, expect, it } from 'vitest';
 import { addDays } from '../../lib/dates';
 import { CHALLENGES } from './challenges';
-import { LINES, lineForDay, returnLine } from './lines';
+import { LINES, lineForDay, MAX_LINE_LENGTH, returnLine } from './lines';
 
 describe('lines to carry', () => {
-  it('every category and the return theme have lines', () => {
+  it('every category and the return theme have at least two short lines', () => {
     for (const theme of ['outside', 'people', 'unplug', 'notice', 'body', 'create', 'return']) {
-      expect(LINES.filter((l) => l.theme === theme).length).toBeGreaterThanOrEqual(3);
+      expect(LINES.filter((l) => l.theme === theme && l.text.length <= MAX_LINE_LENGTH).length).toBeGreaterThanOrEqual(2);
     }
   });
 
-  it('uses the app voice in practice lines', () => {
+  it('every line names its author and work', () => {
     for (const l of LINES) {
-      expect(l.practice).not.toMatch(/!/);
-      expect(l.text.length).toBeLessThan(260);
+      expect(l.author.length).toBeGreaterThan(3);
       expect(l.work.length).toBeGreaterThan(5);
+    }
+  });
+
+  it('the chosen line is always short enough for Today', () => {
+    for (let i = 0; i < 40; i++) {
+      expect(lineForDay(addDays('2026-11-01', i), 'body').text.length).toBeLessThanOrEqual(MAX_LINE_LENGTH);
     }
   });
 
