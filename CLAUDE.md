@@ -11,10 +11,13 @@ A local-first PWA built around a daily loop: **do it, write it, grow**. One smal
 - **Private data is always encrypted** with src/lib/crypto.ts before it is stored. Never store plain text in IndexedDB, localStorage or sessionStorage.
 - **Never log personal text** (notes, talk messages) to the console.
 - **Only Web Crypto** for cryptography (AES-GCM, PBKDF2, ECDH P-256, HKDF). No custom crypto, no crypto libraries.
-- **Talk flow limit:** max 2 questions, enforced in the state machine, not in prompts. The close screen has no "continue" button.
+- **Talk flow limit:** max 2 questions, enforced in the state machine, not in prompts. The close screen has no "continue" button. Every step offers "Answer on paper" as an equal choice to typing.
 - **Safety:** every user message in the Talk flow passes src/lib/safety.ts first. Crisis signs end the flow and show the help screen.
 - **Wording:** "reflection partner", never "therapist", "therapy", "counselor" or "diagnosis". No religious or spiritual framing in the app's own text.
-- **The daily challenge is the core.** Today is the home screen: cairn on top, challenge below, one Done button. After Done, no more content to scroll.
+- **The daily challenge is the core.** Today is the home screen: day line, cairn (about a quarter of the height), then category, title, instruction, level stones, the "why", one Done button. It must fit on one screen at 360×640. After Done and the pen moment, Today closes itself: "Your stone is placed. Closed until tomorrow." Nothing more to scroll.
+- **The quote threshold.** The first open of each day shows one quote, full screen, no navigation. It fades after 60 seconds. "I copied it" (by hand, on paper) adds a mark. No archive, no favourites, no way back: the user's notebook is the only library.
+- **The pen moment timer runs only while the phone lies face down** (DeviceOrientation; iPhone asks permission on the tap). Without orientation data it falls back to a normal timer.
+- **Carve one word.** After writing, the user may carve one word on today's stone. Encrypted, local, never shared on the Trail. Tapping a stone shows its word and date.
 - **Pen and paper come first.** After every challenge comes the pen moment (prompt + timer + "I wrote it"). The app never asks the user to type what they wrote on paper and never stores it. Digital notes are a fallback, never the default.
 - **Stones come from challenges, carved lines (inscriptions) come from writing.**
 - **The cairn never falls, crumbles or looks sad.** Missed days only show "Your cairn stands. Today is enough." No guilt mechanics, no punishment, no loss of progress.
@@ -69,6 +72,8 @@ Stoic calm and rational psychology, based on Janette Rainwater's self-therapy me
 ### Interaction style
 - No dropdowns, no forms, no settings lists, no feeds, no numbers to compete on.
 - Choices are objects: three stepping stones for Easy / Medium / Brave; two stones for yes / no.
+- Three button levels only: primary (filled), secondary (outlined), tertiary (small text, no underline).
+- Navigation: Today, Reflect, Trail, Notes, each with an icon and a small label.
 - The writing timer is an ink line slowly drawing across the screen.
 - Every screen is a scene: the Trail is a landscape, a friend's profile is their cairn seen from above, with weekly rings of stones.
 - Gestures where natural: tap a cairn to visit, long-press to leave a pebble.

@@ -104,6 +104,10 @@ export interface CairnProps {
   className?: string;
   /** Position when nested inside another SVG (the Trail). */
   box?: { x: number; y: number; width: number; height: number };
+  /** Tap a stone. Index 0 is the top stone (the most recent). */
+  onStoneTap?: (fromTop: number) => void;
+  /** Highlight a stone, counted from the top. */
+  selectedFromTop?: number | null;
 }
 
 export function describeCairn(c: CairnState): string {
@@ -120,7 +124,7 @@ export function describeCairn(c: CairnState): string {
 
 const PEBBLE_RX: Record<Level, number> = { easy: 5, medium: 7, brave: 9 };
 
-export function Cairn({ cairn, seed = 7, growTick = 0, recent = [], compact = false, label, className, box }: CairnProps) {
+export function Cairn({ cairn, seed = 7, growTick = 0, recent = [], compact = false, label, className, box, onStoneTap, selectedFromTop = null }: CairnProps) {
   const points = totalPoints(cairn);
   const stage = stageFor(points);
   const v = cairn.visitors;
@@ -189,7 +193,11 @@ export function Cairn({ cairn, seed = 7, growTick = 0, recent = [], compact = fa
         {stones.map((s) => (
           <g key={s.i} className={isNewStone(s.i) ? 'drop-in' : ''} style={isNewStone(s.i) ? { animationDelay: `${(s.i - (prev.current?.count ?? 0)) * 0.25}s` } : undefined}>
             <g transform={`rotate(${s.rot.toFixed(1)} ${s.cx.toFixed(1)} ${s.cy.toFixed(1)})`}>
-              <path d={s.d} className={`stone tone-${s.tone}`} />
+              <path
+                d={s.d}
+                className={`stone tone-${s.tone} ${onStoneTap ? 'tappable' : ''} ${selectedFromTop === count - 1 - s.i ? 'selected' : ''}`}
+                onClick={onStoneTap ? () => onStoneTap(count - 1 - s.i) : undefined}
+              />
               <path d={s.shade} className="shade" />
               {s.i < inscribed &&
                 s.lines.map((l, k) => <path key={k} d={l} className={`carve ${isNewLine(s.i) ? 'draw-in' : ''}`} pathLength={1} />)}

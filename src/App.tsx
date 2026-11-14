@@ -1,8 +1,11 @@
 import { lazy, Suspense } from 'react';
-import { TrailIcon, NotesIcon, SettingsIcon, TalkIcon, TodayIcon } from './components/Icons';
+import { NotesIcon, ReflectIcon, SettingsIcon, TodayIcon, TrailIcon } from './components/Icons';
 import { UpdatePrompt } from './components/UpdatePrompt';
 import { NotesScreen } from './features/notes/NotesScreen';
 import { TalkScreen } from './features/talk/TalkScreen';
+import { lineForDay, returnLine } from './features/today/lines';
+import { QuoteThreshold } from './features/today/QuoteThreshold';
+import { isResting } from './features/today/streak';
 import { TodayScreen } from './features/today/TodayScreen';
 import { useStore, type Tab } from './lib/store';
 
@@ -12,7 +15,7 @@ const SettingsScreen = lazy(() => import('./features/settings/SettingsScreen'));
 
 const NAV: { tab: Tab; label: string; Icon: () => React.JSX.Element }[] = [
   { tab: 'today', label: 'Today', Icon: TodayIcon },
-  { tab: 'talk', label: 'Talk it out', Icon: TalkIcon },
+  { tab: 'talk', label: 'Reflect', Icon: ReflectIcon },
   { tab: 'grove', label: 'Trail', Icon: TrailIcon },
   { tab: 'notes', label: 'Notes', Icon: NotesIcon },
 ];
@@ -31,9 +34,26 @@ function InsecureNotice() {
 }
 
 export function App() {
-  const { ready, tab, go } = useStore();
+  const { ready, tab, go, thresholdPending, today, streak, challenge, markQuote } = useStore();
   if (!window.isSecureContext || !globalThis.crypto?.subtle) return <InsecureNotice />;
   if (!ready) return <div className="app" aria-busy="true" />;
+
+  if (thresholdPending) {
+    const line = isResting(streak, today) ? returnLine(today) : lineForDay(today, challenge.category);
+    return (
+      <QuoteThreshold
+        line={line}
+        onCopied={() => {
+          go('today');
+          void markQuote('copied');
+        }}
+        onContinue={() => {
+          go('today');
+          void markQuote('seen');
+        }}
+      />
+    );
+  }
 
   return (
     <>
@@ -54,8 +74,9 @@ export function App() {
       <nav className="nav" aria-label="Main">
         <div className="nav-inner">
           {NAV.map(({ tab: t, label, Icon }) => (
-            <button key={t} aria-label={label} title={label} aria-current={tab === t ? 'page' : undefined} onClick={() => go(t)}>
+            <button key={t} aria-current={tab === t ? 'page' : undefined} onClick={() => go(t)}>
               <Icon />
+              <span className="nav-label">{label}</span>
             </button>
           ))}
         </div>

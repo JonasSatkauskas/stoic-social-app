@@ -36,6 +36,7 @@ export function cairnFromData(data: AppData): CairnState {
       if (c) t.visitors[c.category] = (t.visitors[c.category] ?? 0) + 1;
     }
     if (day.pen === 'wrote') t.marks += 1;
+    if (day.quote === 'copied') t.marks += 1;
   }
   return t;
 }

@@ -42,6 +42,14 @@ Firestore only ever receives `{ c, iv, t, exp }`: AES-GCM ciphertext at a random
 Any static HTTPS host. Vercel: import the repo, framework Vite, build `npm run build`, output `dist`.
 Add a SPA rewrite if the host needs one (all routes → `/index.html`); the app itself has no routes.
 
+## Demo flow (90 seconds)
+
+1. Open the app on a fresh day (or with `?demo`, which shows the quote threshold on every load). Read the quote aloud: it fades in 60 seconds, so you copy it by hand.
+2. Today: tap Brave, then "Done, Brave".
+3. Pen moment: choose 2 min and put the phone face down. Pick it up: "Paused. Your page is waiting."
+4. Carve one word. The new stone joins the cairn. "Your stone is placed. Closed until tomorrow."
+5. Trail: a friend's lantern is lit. Place a stone together by scanning each other's phones.
+
 ## Demo helpers
 
 - Open the app with `?demo` at the end of the address (e.g. `https://.../?demo`). Then tap the invisible square in the top-left of Today five times quickly: adds five past days of challenges and writing, so the cairn, visitors and rings fill in. Settings → Remove demo days takes them out again.

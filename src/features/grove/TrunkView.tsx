@@ -129,7 +129,7 @@ export function TrunkView({ friend, onBack, onPebble }: { friend: Friend; onBack
         {pebbleToday ? 'You left a pebble today' : 'Leave a pebble'}
       </button>
       <div className="links">
-        <button className="link" onClick={onBack}>
+        <button className="tertiary" onClick={onBack}>
           Back to the trail
         </button>
       </div>

@@ -7,9 +7,13 @@ export const TodayIcon = () => (
     <path d="M2.5 21.2h19" />
   </svg>
 );
-export const TalkIcon = () => (
+/** A feather: reflection and writing, not chat. */
+export const ReflectIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M4 6.5C4 5.1 5.1 4 6.5 4h11C18.9 4 20 5.1 20 6.5v7c0 1.4-1.1 2.5-2.5 2.5H10l-4 4v-4h0.5C5.1 16 4 14.9 4 13.5z" />
+    <path d="M19.5 4.5c-6 .5-10.5 4.8-11.6 11.2l-.9 3.8" />
+    <path d="M19.5 4.5c.4 5.6-3.6 10.4-10.8 11.4" />
+    <path d="M9.5 12.5l4-3.8M8.4 14.7l2.8-.4" />
+    <path d="M4.5 20.5h6" />
   </svg>
 );
 export const TrailIcon = () => (

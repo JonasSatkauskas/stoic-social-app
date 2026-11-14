@@ -223,7 +223,7 @@ export default function SettingsScreen() {
       ) : (
         <p>
           {data.profile.name ?? 'Not set yet.'}{' '}
-          <button className="link" onClick={() => open('name')}>
+          <button className="tertiary" onClick={() => open('name')}>
             Change
           </button>
         </p>
@@ -269,7 +269,7 @@ export default function SettingsScreen() {
       </p>
 
       <div className="links">
-        <button className="link" onClick={() => go('today')}>
+        <button className="tertiary" onClick={() => go('today')}>
           Back to today
         </button>
       </div>

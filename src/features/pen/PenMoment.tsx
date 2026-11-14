@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../../lib/store';
+import { advance, isFaceDown, orientationAvailable } from './faceDown';
 
 const MINUTES = [2, 5, 10];
 
-type Phase = { name: 'choose' } | { name: 'timing'; minutes: number; start: number } | { name: 'finished' };
+type Phase =
+  | { name: 'choose' }
+  | { name: 'starting' }
+  | { name: 'timing'; minutes: number; faceDownMode: boolean }
+  | { name: 'finished' };
 
 function signalTimeUp() {
   try {
@@ -43,12 +48,37 @@ function InkLine({ progress }: { progress: number }) {
 export function PenMoment() {
   const { challenge, pen, go } = useStore();
   const [phase, setPhase] = useState<Phase>({ name: 'choose' });
-  const [now, setNow] = useState(Date.now());
+  const [, setTick] = useState(0);
+  const clock = useRef({ elapsed: 0, since: null as number | null });
+  const [down, setDown] = useState(false);
+  const [everDown, setEverDown] = useState(false);
   const wakeLock = useRef<WakeLockSentinel | null>(null);
 
+  const timing = phase.name === 'timing' ? phase : null;
+  const running = !!timing && (!timing.faceDownMode || down);
+
+  // Listen to orientation while timing in face-down mode.
   useEffect(() => {
-    if (phase.name !== 'timing') return;
-    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    if (!timing?.faceDownMode) return;
+    const onEvent = (e: DeviceOrientationEvent) => {
+      const fd = isFaceDown(e.beta, e.gamma);
+      setDown(fd);
+      if (fd) setEverDown(true);
+    };
+    window.addEventListener('deviceorientation', onEvent);
+    return () => window.removeEventListener('deviceorientation', onEvent);
+  }, [timing?.faceDownMode]);
+
+  // Start or pause the clock when running changes.
+  useEffect(() => {
+    if (!timing) return;
+    clock.current = advance(clock.current, running, Date.now());
+  }, [running, timing]);
+
+  // Tick and keep the screen awake while timing.
+  useEffect(() => {
+    if (!timing) return;
+    const id = window.setInterval(() => setTick((t) => t + 1), 1000);
     navigator.wakeLock
       ?.request('screen')
       .then((w) => (wakeLock.current = w))
@@ -58,31 +88,44 @@ export function PenMoment() {
       void wakeLock.current?.release().catch(() => undefined);
       wakeLock.current = null;
     };
-  }, [phase.name]);
+  }, [timing]);
 
-  const elapsed = phase.name === 'timing' ? now - phase.start : 0;
-  const total = phase.name === 'timing' ? phase.minutes * 60_000 : 1;
+  const c = clock.current;
+  const elapsed = c.since !== null ? c.elapsed + (Date.now() - c.since) : c.elapsed;
+  const total = timing ? timing.minutes * 60_000 : 1;
   const progress = Math.min(1, elapsed / total);
 
   useEffect(() => {
-    if (phase.name === 'timing' && progress >= 1) {
+    if (timing && progress >= 1) {
       signalTimeUp();
       setPhase({ name: 'finished' });
     }
-  }, [phase.name, progress]);
+  }, [timing, progress]);
+
+  const start = async (minutes: number) => {
+    setPhase({ name: 'starting' });
+    const faceDownMode = await orientationAvailable();
+    clock.current = { elapsed: 0, since: null };
+    setDown(false);
+    setEverDown(false);
+    setPhase({ name: 'timing', minutes, faceDownMode });
+  };
 
   const wrote = () => void pen('wrote');
 
-  if (phase.name === 'timing') {
+  if (timing) {
     const left = Math.max(0, Math.ceil((total - elapsed) / 60_000));
+    let message = 'Put your phone face down. We will wait.';
+    if (timing.faceDownMode && !down) message = everDown ? 'Paused. Your page is waiting.' : 'Turn your phone face down to start.';
     return (
       <section className="screen pen" aria-label="Writing time">
-        <p className="center serif" style={{ fontSize: '1.35rem' }}>
-          Put your phone face down. We'll wait.
+        <p className="center serif" style={{ fontSize: '1.35rem' }} role="status">
+          {message}
         </p>
         <InkLine progress={progress} />
         <p className="center muted small" aria-live="off">
-          {left <= 1 ? 'Less than a minute left' : `About ${left} minutes left`}
+          {timing.faceDownMode ? 'The line only moves while the phone lies face down. ' : ''}
+          {left <= 1 ? 'Less than a minute left.' : `About ${left} minutes left.`}
         </p>
         <div className="space" />
         <button className="btn quiet" onClick={wrote}>
@@ -107,10 +150,10 @@ export function PenMoment() {
           <p className="prompt" id="pen-prompt">
             {challenge.pen}
           </p>
-          <p className="center muted">Grab a pen and paper.</p>
+          <p className="center muted">Grab a pen and paper. Then choose your time and put the phone face down.</p>
           <div className="stones" role="group" aria-label="Writing time">
             {MINUTES.map((m) => (
-              <button key={m} className="stone" onClick={() => setPhase({ name: 'timing', minutes: m, start: Date.now() })}>
+              <button key={m} className="stone" disabled={phase.name === 'starting'} onClick={() => void start(m)}>
                 {m} min
               </button>
             ))}
@@ -121,10 +164,10 @@ export function PenMoment() {
         I wrote it
       </button>
       <div className="links" style={{ marginTop: '0.5rem' }}>
-        <button className="link" onClick={() => void pen('skipped')}>
+        <button className="tertiary" onClick={() => void pen('skipped')}>
           Not today
         </button>
-        <button className="link" onClick={() => go('notes', { prompt: challenge.pen })}>
+        <button className="tertiary" onClick={() => go('notes', { prompt: challenge.pen })}>
           No paper nearby?
         </button>
       </div>

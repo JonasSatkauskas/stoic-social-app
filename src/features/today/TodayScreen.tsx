@@ -2,13 +2,12 @@ import { useRef, useState } from 'react';
 import { weekStart } from '../../lib/dates';
 import { useStore } from '../../lib/store';
 import type { Level } from '../../lib/types';
-import { PenMoment } from '../pen/PenMoment';
 import { Cairn } from '../cairn/Cairn';
+import { PenMoment } from '../pen/PenMoment';
+import { CarveWord } from './CarveWord';
 import { LEVEL_LABEL } from './challenges';
 import { demoModeEnabled } from './demo';
-import { LineToCarry } from './LineToCarry';
-import { lineForDay, returnLine } from './lines';
-import { currentStreak, isResting } from './streak';
+import { isResting } from './streak';
 
 const LEVELS: Level[] = ['easy', 'medium', 'brave'];
 const CATEGORY_LABEL = {
@@ -20,25 +19,34 @@ const CATEGORY_LABEL = {
   create: 'Create',
 } as const;
 
+const dayFmt = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
+const shortFmt = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'short' });
+
 export function TodayScreen() {
   const { todayEntry, challenge, cairn, growTick, streak, today, data, complete, swap, devFillHistory } = useStore();
   const [level, setLevel] = useState<Level>('easy');
   const [indoor, setIndoor] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [stone, setStone] = useState<number | null>(null);
   const taps = useRef<number[]>([]);
 
   const done = todayEntry.done;
   if (done && !todayEntry.pen) return <PenMoment />;
+  if (done && todayEntry.pen === 'wrote' && todayEntry.word === undefined) return <CarveWord />;
 
-  const days = currentStreak(streak, today);
   const resting = isResting(streak, today);
   const weekStartKey = weekStart(today);
   const thisWeek = Object.entries(data.days)
     .filter(([d, e]) => d >= weekStartKey && e.done)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([, e]) => e.done!.level);
+  // Carved words, most recent first: the top stone holds the newest word.
+  const words = Object.entries(data.days)
+    .filter(([, e]) => e.word)
+    .sort(([a], [b]) => b.localeCompare(a))
+    .map(([d, e]) => ({ d, word: e.word as string }));
 
-  // Hidden demo control: tap the top-left corner five times quickly to add growth.
+  // Hidden demo control (only with ?demo): tap the top-left corner five times quickly.
   const devTap = () => {
     const now = Date.now();
     taps.current = [...taps.current.filter((t) => now - t < 1500), now];
@@ -48,78 +56,97 @@ export function TodayScreen() {
     }
   };
 
-  return (
-    <section className={`screen ${done ? 'done-screen' : ''}`} aria-labelledby="today-title">
-      {demoModeEnabled() && <button className="dev-button" aria-hidden="true" tabIndex={-1} onClick={devTap} />}
-      <Cairn cairn={cairn} growTick={growTick} recent={thisWeek} className={`today-cairn ${done ? 'small' : resting ? 'resting-size' : ''}`} />
+  const dayLine = dayFmt.format(new Date(today + 'T12:00'));
+  const selected = stone !== null ? words[stone] : undefined;
 
-      {done ? (
-        <div className="done-message">
-          <h1 id="today-title">Done. That was yours to do, and you did it.</h1>
-          <p className="muted">{todayEntry.pen === 'wrote' ? 'A stone placed, and what you wrote carved into it.' : 'A stone placed today.'}</p>
-          <LineToCarry line={lineForDay(today, challenge.category)} />
-          <p className="serif">Done for today. See you tomorrow.</p>
-        </div>
-      ) : (
-        <>
-          {resting ? (
-            <div className="resting">
-              <p>Your cairn stands. Today is enough.</p>
-              <LineToCarry line={returnLine(today)} compact />
-            </div>
-          ) : days > 1 ? (
-            <p className="resting">{days} days in a row.</p>
-          ) : null}
-
-          <div className="challenge">
-            <div className="eyebrow">{CATEGORY_LABEL[challenge.category]}</div>
-            <h1 id="today-title">{challenge.title}</h1>
-            <p className="why">{challenge.why}</p>
-          </div>
-
-          {indoor ? (
-            <p className="level-text" aria-live="polite">
-              {challenge.indoor}
-            </p>
-          ) : (
+  if (done) {
+    return (
+      <section className="screen closed" aria-labelledby="today-title">
+        {demoModeEnabled() && <button className="dev-button" aria-hidden="true" tabIndex={-1} onClick={devTap} />}
+        <Cairn
+          cairn={cairn}
+          growTick={growTick}
+          recent={thisWeek}
+          className="today-cairn closed-cairn"
+          onStoneTap={(i) => setStone((cur) => (cur === i ? null : i))}
+          selectedFromTop={stone}
+        />
+        <h1 id="today-title" className="center">
+          Your stone is placed.
+        </h1>
+        <p className="center muted serif">Closed until tomorrow.</p>
+        <div className="stone-card" role="status" aria-live="polite">
+          {stone === null ? null : selected ? (
             <>
-              <div className="stones" role="group" aria-label="Choose a level">
-                {LEVELS.map((l) => (
-                  <button key={l} className="stone" aria-pressed={level === l} onClick={() => setLevel(l)}>
-                    {LEVEL_LABEL[l]}
-                  </button>
-                ))}
-              </div>
-              <p className="level-text" aria-live="polite">
-                {challenge[level]}
-              </p>
+              <span className="stone-word">{selected.word}</span>
+              <span className="muted small">{shortFmt.format(new Date(selected.d + 'T12:00'))}</span>
             </>
+          ) : (
+            <span className="muted small">No word on this stone.</span>
           )}
+        </div>
+        {words.length > 0 && (
+          <ul className="visually-hidden">
+            {words.slice(0, 8).map((w) => (
+              <li key={w.d}>
+                {shortFmt.format(new Date(w.d + 'T12:00'))}: {w.word}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    );
+  }
 
-          <button
-            className="btn"
-            disabled={busy}
-            onClick={async () => {
-              setBusy(true);
-              await complete(indoor ? 'easy' : level, indoor);
-              setBusy(false);
-            }}
-          >
-            Done{indoor ? '' : `, ${LEVEL_LABEL[level]}`}
-          </button>
+  return (
+    <section className="screen today" aria-labelledby="today-title">
+      {demoModeEnabled() && <button className="dev-button" aria-hidden="true" tabIndex={-1} onClick={devTap} />}
+      <p className="day-line">{dayLine}</p>
+      <Cairn cairn={cairn} growTick={growTick} recent={thisWeek} className="today-cairn" />
+      {resting && <p className="resting">Your cairn stands. Today is enough.</p>}
 
-          <div className="links" style={{ marginTop: '0.75rem' }}>
-            <button className="link" onClick={() => setIndoor((v) => !v)}>
-              {indoor ? 'I can go out' : 'Stuck indoors?'}
+      <div className="challenge">
+        <div className="eyebrow">{CATEGORY_LABEL[challenge.category]}</div>
+        <h1 id="today-title">{challenge.title}</h1>
+        <p className="level-text" aria-live="polite" key={indoor ? 'indoor' : level}>
+          {indoor ? challenge.indoor : challenge[level]}
+        </p>
+      </div>
+
+      {!indoor && (
+        <div className="stones" role="group" aria-label="Choose a level">
+          {LEVELS.map((l) => (
+            <button key={l} className="stone" aria-pressed={level === l} onClick={() => setLevel(l)}>
+              {LEVEL_LABEL[l]}
             </button>
-            {!todayEntry.swapped && (
-              <button className="link" onClick={() => void swap()}>
-                Swap once
-              </button>
-            )}
-          </div>
-        </>
+          ))}
+        </div>
       )}
+
+      <p className="why">{challenge.why}</p>
+
+      <button
+        className="btn"
+        disabled={busy}
+        onClick={async () => {
+          setBusy(true);
+          await complete(indoor ? 'easy' : level, indoor);
+          setBusy(false);
+        }}
+      >
+        Done{indoor ? '' : `, ${LEVEL_LABEL[level]}`}
+      </button>
+
+      <div className="links">
+        <button className="tertiary" onClick={() => setIndoor((v) => !v)}>
+          {indoor ? 'I can go out' : 'Stuck indoors'}
+        </button>
+        {!todayEntry.swapped && (
+          <button className="tertiary" onClick={() => void swap()}>
+            Swap once
+          </button>
+        )}
+      </div>
     </section>
   );
 }

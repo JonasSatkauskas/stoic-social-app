@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { challengeById, challengeForDate, swapForDate } from '../features/today/challenges';
-import { withoutDemoDays } from '../features/today/demo';
+import { demoModeEnabled, withoutDemoDays } from '../features/today/demo';
 import { bumpStreak } from '../features/today/streak';
 import { cairnFromData } from '../features/cairn/growth';
 import { addDays, dateKey } from './dates';
@@ -39,6 +39,13 @@ interface Store {
   removeDemoDays(): Promise<void>;
   /** Clears the day log, growth and streak. Keeps notes, friends and name. */
   resetCairn(): Promise<void>;
+  /** The daily quote threshold has been passed. */
+  markQuote(kind: 'seen' | 'copied'): Promise<void>;
+  /** Carve one word on today's stone, or null to skip. */
+  carveWord(word: string | null): Promise<void>;
+  setFlag(name: string, value: boolean): Promise<void>;
+  /** True while today's quote threshold should be shown. */
+  thresholdPending: boolean;
   replaceData(data: AppData): Promise<void>;
 }
 
@@ -50,6 +57,8 @@ const emptyData = (): AppData => ({
 });
 
 const Ctx = createContext<Store | null>(null);
+
+let demoThresholdDone = false;
 
 /** Older saves used tree points (branch, root). */
 function migrate(d: AppData): AppData {
@@ -73,6 +82,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [growTick, setGrowTick] = useState(0);
   const [tab, setTab] = useState<Tab>('today');
   const [notesDraft, setNotesDraft] = useState<NotesDraft | null>(null);
+  const [thresholdTick, setThresholdTick] = useState(0);
   const dataRef = useRef(data);
   dataRef.current = data;
 
@@ -108,6 +118,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const todayEntry: DayEntry = data.days[today] ?? { challengeId: challengeForDate(today).id, swapped: false };
   const challenge = challengeById(todayEntry.challengeId) ?? challengeForDate(today);
+  // Demo mode shows the threshold once per page load, so it can be presented again.
+  const thresholdPending = demoModeEnabled() ? !demoThresholdDone : !todayEntry.quote && !todayEntry.done;
 
   const updateToday = useCallback(
     (fn: (e: DayEntry) => DayEntry, grew = false) => {
@@ -127,6 +139,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       cairn: cairnFromData(data),
       todayEntry,
       challenge,
+      thresholdPending,
       growTick,
       tab,
       notesDraft,
@@ -178,6 +191,20 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       async removeDemoDays() {
         await persist(withoutDemoDays(dataRef.current));
       },
+      async markQuote(kind) {
+        demoThresholdDone = true;
+        await updateToday((e) => ({ ...e, quote: e.quote === 'copied' ? 'copied' : kind }), kind === 'copied');
+        setThresholdTick((t) => t + 1);
+      },
+      async carveWord(word) {
+        const clean = word === null ? null : word.trim().split(/\s+/)[0].slice(0, 24) || null;
+        await updateToday((e) => ({ ...e, word: clean }), !!clean);
+      },
+      async setFlag(name, value) {
+        const cur = dataRef.current;
+        if (!!cur.flags?.[name] === value) return;
+        await persist({ ...cur, flags: { ...cur.flags, [name]: value } });
+      },
       async resetCairn() {
         const cur = dataRef.current;
         await persist({ ...cur, days: {}, extra: { stones: 0, marks: 0 } });
@@ -189,7 +216,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         await persist(next, true);
       },
     }),
-    [ready, today, data, streak, todayEntry, challenge, growTick, tab, notesDraft, updateToday, persist],
+    [ready, today, data, streak, todayEntry, challenge, growTick, tab, notesDraft, updateToday, persist, thresholdPending, thresholdTick],
   );
 
   return <Ctx.Provider value={store}>{children}</Ctx.Provider>;

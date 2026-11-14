@@ -41,6 +41,24 @@ describe('talk machine', () => {
     expect(submit(initialTalk, '   ')).toBe(initialTalk);
   });
 
+  it('answers on paper count toward the two-question limit', () => {
+    const paper = (s: TalkState) => talkReducer(s, { type: 'paper', seed: 1 });
+    let s = paper(initialTalk);
+    expect(s.step).toBe('ask');
+    s = paper(s);
+    expect(s.step).toBe('ask');
+    s = paper(s);
+    expect(s.step).toBe('close');
+    if (s.step === 'close') expect(s.messages.filter((m) => m.from === 'you').every((m) => m.paper && m.text === '')).toBe(true);
+  });
+
+  it('mixing paper and typing still stops at two questions', () => {
+    let s = submit(initialTalk, 'work is a lot');
+    s = talkReducer(s, { type: 'paper', seed: 1 });
+    s = submit(s, 'done');
+    expect(s.step).toBe('close');
+  });
+
   it('finish ends early', () => {
     const s = submit(initialTalk, 'work is a lot');
     expect(talkReducer(s, { type: 'finish' }).step).toBe('close');

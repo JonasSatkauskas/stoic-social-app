@@ -13,6 +13,7 @@ export function TalkScreen() {
   const [text, setText] = useState('');
   const { challenge, go } = useStore();
   const [shared, setShared] = useState<string | null>(null);
+  const [onPaper, setOnPaper] = useState(false);
   const [quote] = useState(() => bank.quotes[Math.floor(Math.random() * bank.quotes.length)]);
 
   // Optional on-device rephrasing of the first question. Falls back silently.
@@ -21,7 +22,7 @@ export function TalkScreen() {
     if (!firstAsk) return;
     let live = true;
     const userText = firstAsk.messages[0].text;
-    if (hasCrisisSigns(userText)) return;
+    if (!userText || hasCrisisSigns(userText)) return;
     void rephraseQuestion(firstAsk.question, userText).then((q) => {
       if (live && q !== firstAsk.question) dispatch({ type: 'rephrase', question: q });
     });
@@ -45,7 +46,7 @@ export function TalkScreen() {
 
   if (state.step === 'close') {
     const lastQuestion = [...state.messages].reverse().find((m) => m.from === 'app')?.text;
-    const transcript = state.messages.map((m) => (m.from === 'you' ? m.text : `> ${m.text}`)).join('\n\n');
+    const transcript = state.messages.map((m) => (m.from === 'you' ? (m.paper ? '(written on paper)' : m.text) : `> ${m.text}`)).join('\n\n');
 
     const share = async () => {
       try {
@@ -74,7 +75,7 @@ export function TalkScreen() {
           </li>
           <li>
             <div className="eyebrow">2. A challenge</div>
-            <button className="link" style={{ padding: '4px 0', color: 'var(--ink)', fontSize: '1.05rem' }} onClick={leave}>
+            <button className="tertiary" style={{ padding: '4px 0', color: 'var(--ink)', fontSize: '1.05rem' }} onClick={leave}>
               {challenge.title}
             </button>
           </li>
@@ -98,10 +99,10 @@ export function TalkScreen() {
           </cite>
         </blockquote>
         <div className="links">
-          <button className="link" onClick={() => go('notes', { text: transcript })}>
+          <button className="tertiary" onClick={() => go('notes', { text: transcript })}>
             Save to notes
           </button>
-          <button className="link" onClick={leave}>
+          <button className="tertiary" onClick={leave}>
             Close
           </button>
         </div>
@@ -111,14 +112,44 @@ export function TalkScreen() {
   }
 
   const asking = state.step === 'ask' ? state : null;
-  const lastYou = asking ? [...asking.messages].reverse().find((m) => m.from === 'you')?.text : null;
+  const lastYou = asking ? [...asking.messages].reverse().find((m) => m.from === 'you') : null;
+
+  if (onPaper) {
+    return (
+      <section className="screen pen" aria-labelledby="paper-title">
+        <p className="talk-label">Reflection partner, not a therapist.</p>
+        <div className="eyebrow center">On paper</div>
+        <h1 id="paper-title" className="prompt">
+          {asking ? asking.question : 'Write what is on your mind.'}
+        </h1>
+        <p className="center muted">Write by hand. Take the time you need. The app will not see it.</p>
+        <div className="space" />
+        <button
+          className="btn"
+          onClick={() => {
+            setOnPaper(false);
+            dispatch({ type: 'paper' });
+          }}
+        >
+          Done writing
+        </button>
+        <div className="links">
+          <button className="tertiary" onClick={() => setOnPaper(false)}>
+            Type instead
+          </button>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="screen" aria-labelledby="talk-title">
+    <section className="screen talk" aria-labelledby="talk-title">
       <p className="talk-label">Reflection partner, not a therapist.</p>
       {asking ? (
         <>
-          {lastYou && <p className="bubble-you">{lastYou}</p>}
+          {lastYou && (
+            <p className="bubble-you">{lastYou.paper ? 'You wrote this one on paper.' : lastYou.text}</p>
+          )}
           <h2 id="talk-title" className="question" aria-live="polite">
             {asking.question}
           </h2>
@@ -136,23 +167,27 @@ export function TalkScreen() {
         id="talk-text"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        rows={6}
+        rows={8}
         placeholder={asking ? 'Your answer' : 'What happened?'}
       />
       <p className="field-hint">
         <span>Not stored, not sent.</span>
       </p>
-      <div className="space" />
-      <button className="btn" disabled={!text.trim()} onClick={submit}>
-        {asking ? 'Answer' : 'Go on'}
-      </button>
-      {asking && (
-        <div className="links">
-          <button className="link" onClick={() => dispatch({ type: 'finish' })}>
-            That is enough for now
-          </button>
-        </div>
-      )}
+      <div className="talk-actions">
+        <button className="btn" disabled={!text.trim()} onClick={submit}>
+          {asking ? 'Answer' : 'Ask me'}
+        </button>
+        <button className="btn quiet" onClick={() => setOnPaper(true)}>
+          Answer on paper
+        </button>
+        {asking && (
+          <div className="links">
+            <button className="tertiary" onClick={() => dispatch({ type: 'finish' })}>
+              That is enough for now
+            </button>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

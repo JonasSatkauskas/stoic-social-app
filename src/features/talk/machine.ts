@@ -11,6 +11,8 @@ export const MAX_QUESTIONS = 2;
 export interface Message {
   from: 'you' | 'app';
   text: string;
+  /** The answer was written on paper; the app never sees it. */
+  paper?: boolean;
 }
 
 export type TalkState =
@@ -21,6 +23,8 @@ export type TalkState =
 
 export type TalkEvent =
   | { type: 'submit'; text: string; seed?: number }
+  /** The user answered on paper. Counts as an answer, carries no text. */
+  | { type: 'paper'; seed?: number }
   | { type: 'finish' }
   | { type: 'rephrase'; question: string }
   | { type: 'reset' };
@@ -77,29 +81,32 @@ export function talkReducer(state: TalkState, event: TalkEvent): TalkState {
     return state;
   }
 
-  // submit
-  const text = event.text.trim();
-  if (!text) return state;
-  if (hasCrisisSigns(text)) return { step: 'crisis' };
+  // submit or paper
   const seed = event.seed ?? Math.floor(Math.random() * 1000);
+  let mine: Message;
+  if (event.type === 'paper') {
+    mine = { from: 'you', text: '', paper: true };
+  } else {
+    const text = event.text.trim();
+    if (!text) return state;
+    if (hasCrisisSigns(text)) return { step: 'crisis' };
+    mine = { from: 'you', text };
+  }
 
   if (state.step === 'listen') {
-    const topic = detectTopic(text);
+    const topic = mine.paper ? 'other' : detectTopic(mine.text);
     const question = firstQuestion(topic, seed);
     return {
       step: 'ask',
       asked: 1,
       topic,
       question,
-      messages: [
-        { from: 'you', text },
-        { from: 'app', text: question },
-      ],
+      messages: [mine, { from: 'app', text: question }],
     };
   }
 
   // state.step === 'ask'
-  const messages: Message[] = [...state.messages, { from: 'you', text }];
+  const messages: Message[] = [...state.messages, mine];
   if (state.asked >= MAX_QUESTIONS) return { step: 'close', messages };
   const question = followUp(seed);
   return {

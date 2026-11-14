@@ -18,6 +18,10 @@ export interface DayEntry {
   swapped: boolean;
   done?: { level: Level; indoor: boolean; at: number };
   pen?: 'wrote' | 'skipped';
+  /** The daily quote: shown once, then gone. 'copied' = copied by hand onto paper. */
+  quote?: 'seen' | 'copied';
+  /** One optional word carved on today's stone. null = the user chose not to. Never shared. */
+  word?: string | null;
   /** Added by the demo shortcut, not by the user. */
   demo?: boolean;
 }
@@ -41,4 +45,6 @@ export interface AppData {
   extra: { stones: number; marks: number };
   profile: { name: string | null };
   createdAt: number;
+  /** One-time hints already shown (for example the Trail instructions). */
+  flags?: Record<string, boolean>;
 }

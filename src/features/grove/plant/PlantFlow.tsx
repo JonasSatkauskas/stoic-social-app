@@ -150,7 +150,7 @@ export function PlantFlow({ onDone }: { onDone: () => void }) {
           Continue
         </button>
         <div className="links">
-          <button className="link" onClick={onDone}>
+          <button className="tertiary" onClick={onDone}>
             Not now
           </button>
         </div>
@@ -221,7 +221,7 @@ export function PlantFlow({ onDone }: { onDone: () => void }) {
           Try again
         </button>
         <div className="links">
-          <button className="link" onClick={onDone}>
+          <button className="tertiary" onClick={onDone}>
             Back to the trail
           </button>
         </div>
@@ -269,7 +269,7 @@ export function PlantFlow({ onDone }: { onDone: () => void }) {
         </button>
       )}
       <div className="links">
-        <button className="link" onClick={onDone}>
+        <button className="tertiary" onClick={onDone}>
           Not now
         </button>
       </div>

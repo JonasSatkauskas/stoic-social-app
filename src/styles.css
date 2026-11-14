@@ -1,7 +1,7 @@
 :root {
   --paper: #f4efe4;
   --paper-2: #ebe4d5;
-  --stone: #8a8478;
+  --stone: #6f695e;
   --stone-light: #d8d1c2;
   --stone-fill: #e2dbcc;
   --olive: #4f5b32;
@@ -24,7 +24,7 @@
 
   --line: 1px solid var(--stone-light);
   --radius: 14px;
-  --nav-h: 64px;
+  --nav-h: 68px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 
   color-scheme: light dark;
@@ -34,7 +34,7 @@
   :root {
     --paper: #23221f;
     --paper-2: #2c2b27;
-    --stone: #9d968a;
+    --stone: #ada89c;
     --stone-light: #45423c;
     --stone-fill: #3a3833;
     --olive: #a3b07a;
@@ -72,6 +72,15 @@ body {
 
 #root {
   min-height: 100dvh;
+}
+
+h1,
+h2,
+h3,
+.prompt,
+.question,
+blockquote {
+  text-wrap: balance;
 }
 
 h1,
@@ -195,28 +204,31 @@ button {
 .nav button {
   background: none;
   border: 0;
-  width: 64px;
-  height: 56px;
-  display: grid;
-  place-items: center;
+  min-width: 68px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
   color: var(--stone);
   cursor: pointer;
   border-radius: 12px;
   position: relative;
 }
 
-.nav button[aria-current='page'] {
-  color: var(--ink);
+.nav-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
 }
 
-.nav button[aria-current='page']::after {
-  content: '';
-  position: absolute;
-  bottom: 6px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--olive);
+.nav button[aria-current='page'] {
+  color: var(--olive);
+}
+
+.nav button[aria-current='page'] .nav-label {
+  font-weight: 600;
 }
 
 .nav svg {
@@ -275,14 +287,46 @@ button {
 }
 
 .btn:disabled {
-  opacity: 0.4;
+  background: transparent;
+  color: var(--stone);
+  border-color: var(--stone-light);
+  border-style: dashed;
   cursor: default;
 }
 
+/* Secondary: outlined. */
 .btn.quiet {
   background: transparent;
   color: var(--ink);
+  border-color: var(--stone);
+}
+
+.btn.quiet:disabled {
+  color: var(--stone);
   border-color: var(--stone-light);
+}
+
+/* Tertiary: small text, no underline. */
+.tertiary {
+  background: none;
+  border: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
+  padding: 12px 10px;
+  min-height: 48px;
+  cursor: pointer;
+}
+
+.tertiary:active {
+  color: var(--ink);
+}
+
+.small-btn {
+  min-height: 44px;
+  width: auto;
+  display: inline-block;
+  font-size: 0.95rem;
 }
 
 .link {
@@ -353,6 +397,19 @@ button {
 
 .stone:active {
   transform: scale(0.96);
+}
+
+.stone:disabled {
+  opacity: 0.5;
+}
+
+.stone.stone-primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+  max-width: 220px;
+  min-height: 64px;
+  padding: 10px 28px;
 }
 
 /* ---------- cairn ---------- */
@@ -752,6 +809,9 @@ input:focus {
 
 .grove-scroll {
   margin: 0 -22px;
+  /* Soft edges: cairns further along the trail fade out, a hint to swipe. */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 11%, #000 89%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 11%, #000 89%, transparent);
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x proximity;
@@ -765,14 +825,20 @@ input:focus {
 
 .grove-scene {
   display: block;
-  height: 256px;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 .grove-scene .hill {
   fill: var(--paper-2);
   stroke: var(--stone);
   stroke-width: 1;
+}
+
+.grove-scene .ridge {
+  fill: none;
+  stroke: var(--stone-light);
+  stroke-width: 1;
+  stroke-linejoin: round;
 }
 
 .grove-scene .far-hill {
@@ -788,8 +854,19 @@ input:focus {
 .grove-scene .name {
   font-family: var(--serif);
   font-size: 13px;
-  fill: var(--ink-soft);
+  fill: var(--ink);
   text-anchor: middle;
+  /* A halo in the ground colour keeps the trail line from crossing names. */
+  paint-order: stroke;
+  stroke: var(--paper-2);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+
+.grove-scene .name.sub {
+  font-family: var(--sans);
+  font-size: 10px;
+  fill: var(--stone);
 }
 
 .grove-scene .plot {
@@ -824,20 +901,28 @@ input:focus {
 
 .grove-scene .lantern-glow {
   fill: var(--lantern);
-  opacity: 0.25;
-  animation: glow 3.5s ease-in-out infinite;
+  opacity: 0.35;
+  animation: glow 3s ease-in-out infinite;
 }
 
 .grove-scene .lantern {
   fill: var(--lantern);
   stroke: var(--ink);
   stroke-width: 1;
+  stroke-linejoin: round;
 }
 
+.grove-scene .lantern-handle,
+.grove-scene .lantern-base {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+}
 
 @keyframes glow {
   50% {
-    opacity: 0.5;
+    opacity: 0.6;
   }
 }
 
@@ -1204,4 +1289,266 @@ input:focus {
     margin: 0;
     font-size: 0.95rem;
   }
+}
+
+
+/* ---------- Today: everything fits on one screen ---------- */
+
+.today {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 18px);
+}
+
+.day-line {
+  text-align: center;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin: 0 0 0.25rem;
+}
+
+.today .today-cairn {
+  height: 24dvh;
+  max-height: 230px;
+  width: auto;
+  max-width: 100%;
+}
+
+.today .resting {
+  margin: 0 0 0.75rem;
+}
+
+.today .challenge h1 {
+  margin-bottom: 0.4rem;
+}
+
+.today .level-text {
+  min-height: 3.2em;
+  margin: 0 0 0.25rem;
+  animation: fade 0.35s ease-out;
+}
+
+.today .stones {
+  margin: 0.75rem 0;
+}
+
+.today .why {
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  margin: 0 0 1rem;
+}
+
+@media (max-height: 700px) {
+  .today h1 {
+    font-size: 1.6rem;
+  }
+  .today .stone {
+    min-height: 50px;
+  }
+  .today .level-text {
+    font-size: 1rem;
+  }
+  .today .btn {
+    min-height: 52px;
+  }
+}
+
+/* ---------- closed until tomorrow ---------- */
+
+.closed {
+  min-height: calc(100dvh - var(--nav-h) - var(--safe-bottom) - 40px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.closed .closed-cairn {
+  height: 42dvh;
+  max-height: 360px;
+  width: auto;
+  max-width: 100%;
+}
+
+.closed h1 {
+  margin-top: 0.5rem;
+}
+
+.stone.tappable {
+  cursor: pointer;
+}
+
+.stone.selected {
+  stroke: var(--olive);
+  stroke-width: 2.4;
+}
+
+.stone-card {
+  min-height: 3.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stone-word {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+}
+
+/* ---------- carve one word ---------- */
+
+input.carve-input {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  text-align: center;
+  max-width: 280px;
+  margin: 1rem auto 0;
+}
+
+.center-hint {
+  justify-content: center;
+}
+
+/* ---------- quote threshold ---------- */
+
+.threshold {
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  padding: calc(env(safe-area-inset-top, 0px) + 32px) 28px calc(env(safe-area-inset-bottom, 0px) + 32px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.threshold-hint {
+  font-size: 0.85rem;
+  color: var(--stone);
+  margin: 0;
+}
+
+.threshold-quote {
+  margin: 0;
+  transition: opacity 9s ease-in;
+}
+
+.threshold-quote.fading,
+.threshold-quote.gone {
+  opacity: 0;
+}
+
+.threshold-quote blockquote {
+  margin: 0 0 1.25rem;
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.threshold-quote figcaption {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.threshold-quote cite {
+  font-style: normal;
+}
+
+.threshold-practice {
+  margin: 1.25rem auto 0;
+  max-width: 30ch;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.threshold-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-height: 640px) {
+  .threshold-quote blockquote {
+    font-size: 1.35rem;
+  }
+}
+
+/* ---------- talk ---------- */
+
+.talk textarea {
+  min-height: 11em;
+}
+
+.talk-actions {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---------- trail ---------- */
+
+.trail-summary {
+  text-align: center;
+  margin: 0.5rem 0 1rem;
+  min-height: 1.5rem;
+}
+
+.trail-line {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.help-stone {
+  width: 48px;
+  height: 40px;
+  border: 1.5px solid var(--stone-light);
+  background: var(--stone-fill);
+  color: var(--ink-soft);
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  border-radius: 48% 52% 46% 54% / 58% 50% 50% 42%;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+/* ---------- notes ---------- */
+
+.note-day-title {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  margin: 1.25rem 0 0.25rem;
+}
+
+.note-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.note {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transition: background 0.2s;
+  border-radius: 10px;
+}
+
+.note.held {
+  background: var(--paper-2);
+  padding: 1rem 0.75rem;
+}
+
+.note-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 0.75rem;
 }
